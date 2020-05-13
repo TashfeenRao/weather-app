@@ -1,4 +1,10 @@
 const domDisplayer = (() => {
+    const displayTemp = (data) => {
+        const weatherContent = document.querySelector('#weather-content');
+        weatherContent.querySelector('h1').textContent = data.name;
+     const container = document.querySelector('.oc-temp');
+     container.querySelector('p').textContent = data.main.temp;
+    }
   const showError = (err) => {
     const cont = document.querySelector('#weather-content');
     cont.style.display = 'none';
@@ -16,7 +22,7 @@ const domDisplayer = (() => {
     const input = document.querySelector('.validate');
     input.value = '';
   }
-  return { showError, clearInput};
+  return { showError, clearInput, displayTemp};
 })();
 
 export default domDisplayer;
