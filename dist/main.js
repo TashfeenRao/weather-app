@@ -151,7 +151,7 @@ eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn th
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nconst domListner = (() => {\r\n  const getCityName = () => {\r\n    const input = document.querySelector('.validate');\r\n    const btn = document.querySelector('.btn-small');\r\n    btn.addEventListener('click', () => {\r\n      if (!input.checkValidity()) {\r\n        console.log('empty form');\r\n      } else {\r\n        console.log(input.value);\r\n      }\r\n    });\r\n  };\r\n  return { getCityName };\r\n})();\r\n\r\n/* harmony default export */ __webpack_exports__[\"default\"] = (domListner);\n\n//# sourceURL=webpack:///./src/domListner.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _getWeather__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getWeather */ \"./src/getWeather.js\");\n\r\nconst domListner = (() => {\r\n  const getCityName = () => {\r\n    const input = document.querySelector('.validate');\r\n    const btn = document.querySelector('.btn-small');\r\n    btn.addEventListener('click', () => {\r\n      if (!input.checkValidity()) {\r\n        console.log('empty form');\r\n      } else {\r\n        _getWeather__WEBPACK_IMPORTED_MODULE_0__[\"default\"].sendRequest(input.value).then((data) => {\r\n            console.log(data.main.temp);\r\n        });\r\n      }\r\n    });\r\n  };\r\n  return { getCityName };\r\n})();\r\n\r\n/* harmony default export */ __webpack_exports__[\"default\"] = (domListner);\n\n//# sourceURL=webpack:///./src/domListner.js?");
 
 /***/ }),
 
@@ -163,7 +163,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nconst domListner = (() => {\r
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nconst getData = (() => {\r\n  const sendRequest = async () => {\r\n    try {\r\n      const city = 'lahore';\r\n      const rawData = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=cbf4a4769da6bbf794164c449e463b35`, { mode: 'cors' });\r\n      const data = await rawData.json();\r\n      return data;\r\n    } catch (error) {\r\n      return error;\r\n    }\r\n  };\r\n  return { sendRequest };\r\n})();\r\n\r\n/* harmony default export */ __webpack_exports__[\"default\"] = (getData);\n\n//# sourceURL=webpack:///./src/getWeather.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nconst getData = (() => {\r\n  const sendRequest = async (city) => {\r\n    try {\r\n      const rawData = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=cbf4a4769da6bbf794164c449e463b35`, { mode: 'cors' });\r\n      const data = await rawData.json();\r\n      return data;\r\n    } catch (error) {\r\n      return error;\r\n    }\r\n  };\r\n  return { sendRequest };\r\n})();\r\n\r\n/* harmony default export */ __webpack_exports__[\"default\"] = (getData);\n\n//# sourceURL=webpack:///./src/getWeather.js?");
 
 /***/ }),
 

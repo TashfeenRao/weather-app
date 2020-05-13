@@ -1,3 +1,4 @@
+import getWeather from './getWeather';
 const domListner = (() => {
   const getCityName = () => {
     const input = document.querySelector('.validate');
@@ -6,7 +7,9 @@ const domListner = (() => {
       if (!input.checkValidity()) {
         console.log('empty form');
       } else {
-        console.log(input.value);
+        getWeather.sendRequest(input.value).then((data) => {
+            console.log(data.main.temp);
+        });
       }
     });
   };
