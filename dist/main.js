@@ -104,7 +104,7 @@ eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../.
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"body {\\n  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);\\n}\\n\\n.col {\\n  margin-right: auto;\\n}\", \"\"]);\n// Exports\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/style.scss?./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js");
+eval("// Imports\nvar ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\");\nexports = ___CSS_LOADER_API_IMPORT___(false);\n// Module\nexports.push([module.i, \"body {\\n  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);\\n}\\n\\na {\\n  display: block !important;\\n}\\n\\n.col {\\n  margin-right: auto;\\n}\\n\\n.btn-small {\\n  display: block;\\n}\\n\\n.temp-container {\\n  display: flex;\\n  align-items: flex-end;\\n  justify-content: space-around;\\n}\\n.temp-container p {\\n  font-size: 2rem;\\n  font-weight: 600;\\n  margin-bottom: 0;\\n}\\n.temp-container .oc-temp {\\n  display: flex;\\n  justify-content: start;\\n  align-items: center;\\n}\\n\\n.fas {\\n  font-size: 50px;\\n  color: salmon;\\n}\", \"\"]);\n// Exports\nmodule.exports = exports;\n\n\n//# sourceURL=webpack:///./src/style.scss?./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js");
 
 /***/ }),
 
