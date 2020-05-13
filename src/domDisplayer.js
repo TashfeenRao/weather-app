@@ -12,7 +12,11 @@ const domDisplayer = (() => {
       </div>
     </div>`;
   };
-  return { showError };
+  const clearInput = () => {
+    const input = document.querySelector('.validate');
+    input.value = '';
+  }
+  return { showError, clearInput};
 })();
 
 export default domDisplayer;

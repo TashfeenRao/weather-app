@@ -10,7 +10,9 @@ const domListner = (() => {
         console.log('empty form');
       } else {
         getWeather.sendRequest(input.value).then((data) => {
+            domDisplayer.clearInput();
           console.log(data.main.temp);
+
         }).catch( error => {
           domDisplayer.showError(error);
         }
