@@ -1,11 +1,13 @@
 const domDisplayer = (() => {
+  let weather;
   const displayFerhanheit = (temp) => {
     const content = document.querySelector('#weather-content');
     const div = document.createElement('div');
     div.className = 'temp-container';
     div.innerHTML = `
     <h4>Temprature</h4>
-    <i class="fas fa-cloud"></i>
+    <p>${weather.weather[0].main}</p>
+    <img src='http://openweathermap.org/img/wn/${weather.weather[0].icon}.png' />
     <div class="oc-temp">
         <p>${temp}</p>
         <span></span>
@@ -14,12 +16,14 @@ const domDisplayer = (() => {
     content.appendChild(div);
   };
   const displayTemp = (data) => {
+    weather = data;
     const row = document.querySelector('#weather-container');
     row.innerHTML = `<div class="col center-align" id="weather-content">
     <h1>${data.name}</h1>
     <div class="temp-container">
         <h4>Temprature</h4>
-        <i class="fas fa-cloud"></i>
+        <p>${weather.weather[0].main}</p>
+        <img src='http://openweathermap.org/img/wn/${data.weather[0].icon}.png' />
         <div class="oc-temp">
             <p>${data.main.temp}</p>
             <span>o</span>
