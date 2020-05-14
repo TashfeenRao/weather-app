@@ -9,13 +9,14 @@ const domListner = (() => {
       if (!input.checkValidity()) {
         console.log('empty form');
       } else {
-        getWeather.sendRequest(input.value).then((data) => {
+        getWeather.inCentigrade(input.value).then((data) => {
           domDisplayer.clearInput();
           console.log(data);
           domDisplayer.displayTemp(data);
         }).catch(() => {
           domDisplayer.showError();
         });
+        getWeather.infahrenheit(input.value)
       }
     });
   };

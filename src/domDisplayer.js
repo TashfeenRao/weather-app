@@ -1,9 +1,7 @@
-import domListner from './domListner';
-
 const domDisplayer = (() => {
   const displayTemp = (data) => {
     const row = document.querySelector('#weather-container');
-    row.innerHTML = ` <div class="col center-align" id="weather-content">
+    row.innerHTML = `<div class="col center-align" id="weather-content">
     <h1>${data.name}</h1>
     <div class="temp-container">
         <h4>Temprature</h4>
@@ -31,7 +29,11 @@ const domDisplayer = (() => {
     const input = document.querySelector('.validate');
     input.value = '';
   };
-  return { showError, clearInput, displayTemp };
+  return {
+    showError,
+    clearInput,
+    displayTemp
+  };
 })();
 
 export default domDisplayer;
