@@ -13,8 +13,8 @@ const domListner = (() => {
           domDisplayer.clearInput();
           console.log(data);
           domDisplayer.displayTemp(data);
-        }).catch(error => {
-          domDisplayer.showError(error);
+        }).catch(() => {
+          domDisplayer.showError();
         });
       }
     });
