@@ -1,7 +1,5 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {};
+(function ($, anim) {
+  const _defaults = {};
 
   /**
    * @class
@@ -45,7 +43,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Range;
     }
 
@@ -65,11 +63,11 @@
       this._handleRangeChangeBound = this._handleRangeChange.bind(this);
       this._handleRangeMousedownTouchstartBound = this._handleRangeMousedownTouchstart.bind(this);
       this._handleRangeInputMousemoveTouchmoveBound = this._handleRangeInputMousemoveTouchmove.bind(
-        this
+        this,
       );
       this._handleRangeMouseupTouchendBound = this._handleRangeMouseupTouchend.bind(this);
       this._handleRangeBlurMouseoutTouchleaveBound = this._handleRangeBlurMouseoutTouchleave.bind(
-        this
+        this,
       );
 
       this.el.addEventListener('change', this._handleRangeChangeBound);
@@ -121,10 +119,10 @@
         this._showRangeBubble();
       }
 
-      let offsetLeft = this._calcRangeOffset();
+      const offsetLeft = this._calcRangeOffset();
       $(this.thumb)
         .addClass('active')
-        .css('left', offsetLeft + 'px');
+        .css('left', `${offsetLeft}px`);
     }
 
     /**
@@ -143,10 +141,10 @@
       }
 
       if (e.type !== 'input') {
-        let offsetLeft = this._calcRangeOffset();
+        const offsetLeft = this._calcRangeOffset();
         $(this.thumb)
           .addClass('active')
-          .css('left', offsetLeft + 'px');
+          .css('left', `${offsetLeft}px`);
       }
     }
 
@@ -159,10 +157,10 @@
           this._showRangeBubble();
         }
 
-        let offsetLeft = this._calcRangeOffset();
+        const offsetLeft = this._calcRangeOffset();
         $(this.thumb)
           .addClass('active')
-          .css('left', offsetLeft + 'px');
+          .css('left', `${offsetLeft}px`);
         $(this.value).html(this.$el.val());
       }
     }
@@ -180,8 +178,8 @@
      */
     _handleRangeBlurMouseoutTouchleave() {
       if (!this._mousedown) {
-        let paddingLeft = parseInt(this.$el.css('padding-left'));
-        let marginLeft = 7 + paddingLeft + 'px';
+        const paddingLeft = parseInt(this.$el.css('padding-left'));
+        const marginLeft = `${7 + paddingLeft}px`;
 
         if ($(this.thumb).hasClass('active')) {
           anim.remove(this.thumb);
@@ -191,8 +189,8 @@
             width: 0,
             top: 10,
             easing: 'easeOutQuad',
-            marginLeft: marginLeft,
-            duration: 100
+            marginLeft,
+            duration: 100,
           });
         }
         $(this.thumb).removeClass('active');
@@ -222,21 +220,21 @@
      * morph thumb into bubble
      */
     _showRangeBubble() {
-      let paddingLeft = parseInt(
+      const paddingLeft = parseInt(
         $(this.thumb)
           .parent()
-          .css('padding-left')
+          .css('padding-left'),
       );
-      let marginLeft = -7 + paddingLeft + 'px'; // TODO: fix magic number?
+      const marginLeft = `${-7 + paddingLeft}px`; // TODO: fix magic number?
       anim.remove(this.thumb);
       anim({
         targets: this.thumb,
         height: 30,
         width: 30,
         top: -30,
-        marginLeft: marginLeft,
+        marginLeft,
         duration: 300,
-        easing: 'easeOutQuint'
+        easing: 'easeOutQuint',
       });
     }
 
@@ -245,10 +243,10 @@
      * @return {Number}  offset in pixels
      */
     _calcRangeOffset() {
-      let width = this.$el.width() - 15;
-      let max = parseFloat(this.$el.attr('max')) || 100; // Range default max
-      let min = parseFloat(this.$el.attr('min')) || 0; // Range default min
-      let percent = (parseFloat(this.$el.val()) - min) / (max - min);
+      const width = this.$el.width() - 15;
+      const max = parseFloat(this.$el.attr('max')) || 100; // Range default max
+      const min = parseFloat(this.$el.attr('min')) || 0; // Range default min
+      const percent = (parseFloat(this.$el.val()) - min) / (max - min);
       return percent * width;
     }
   }
@@ -260,4 +258,4 @@
   }
 
   Range.init($('input[type=range]'));
-})(cash, M.anime);
+}(cash, M.anime));

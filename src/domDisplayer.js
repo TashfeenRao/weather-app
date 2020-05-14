@@ -5,8 +5,7 @@ const domDisplayer = (() => {
     const div = document.createElement('div');
     div.className = 'temp-container';
     div.innerHTML = `
-    <h4>Temprature</h4>
-    <p>${weather.weather[0].main}</p>
+    <h4>${weather.weather[0].main}</h4>
     <img src='http://openweathermap.org/img/wn/${weather.weather[0].icon}.png' />
     <div class="oc-temp">
         <p>${temp}</p>
@@ -21,11 +20,10 @@ const domDisplayer = (() => {
     row.innerHTML = `<div class="col center-align" id="weather-content">
     <h1>${data.name}</h1>
     <div class="temp-container">
-        <h4>Temprature</h4>
-        <p>${weather.weather[0].main}</p>
+        <h4>${weather.weather[0].main}</h4>
         <img src='http://openweathermap.org/img/wn/${data.weather[0].icon}.png' />
         <div class="oc-temp">
-            <p>${data.main.temp}</p>
+            <p>${Math.floor(data.main.temp)}</p>
             <span>o</span>
             <p>C</p>
         </div>

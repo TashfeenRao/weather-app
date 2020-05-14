@@ -1,7 +1,5 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     opacity: 0.5,
     inDuration: 250,
     outDuration: 250,
@@ -12,7 +10,7 @@
     preventScrolling: true,
     dismissible: true,
     startingTop: '4%',
-    endingTop: '10%'
+    endingTop: '10%',
   };
 
   /**
@@ -75,7 +73,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Modal;
     }
 
@@ -120,10 +118,10 @@
      * @param {Event} e
      */
     _handleTriggerClick(e) {
-      let $trigger = $(e.target).closest('.modal-trigger');
+      const $trigger = $(e.target).closest('.modal-trigger');
       if ($trigger.length) {
-        let modalId = M.getIdFromTrigger($trigger[0]);
-        let modalInstance = document.getElementById(modalId).M_Modal;
+        const modalId = M.getIdFromTrigger($trigger[0]);
+        const modalInstance = document.getElementById(modalId).M_Modal;
         if (modalInstance) {
           modalInstance.open($trigger);
         }
@@ -145,7 +143,7 @@
      * @param {Event} e
      */
     _handleModalCloseClick(e) {
-      let $closeTrigger = $(e.target).closest('.modal-close');
+      const $closeTrigger = $(e.target).closest('.modal-close');
       if ($closeTrigger.length) {
         this.close();
       }
@@ -180,11 +178,11 @@
       // Set initial styles
       $.extend(this.el.style, {
         display: 'block',
-        opacity: 0
+        opacity: 0,
       });
       $.extend(this.$overlay[0].style, {
         display: 'block',
-        opacity: 0
+        opacity: 0,
       });
 
       // Animate overlay
@@ -192,11 +190,11 @@
         targets: this.$overlay[0],
         opacity: this.options.opacity,
         duration: this.options.inDuration,
-        easing: 'easeOutQuad'
+        easing: 'easeOutQuad',
       });
 
       // Define modal animation options
-      let enterAnimOptions = {
+      const enterAnimOptions = {
         targets: this.el,
         duration: this.options.inDuration,
         easing: 'easeOutCubic',
@@ -205,14 +203,14 @@
           if (typeof this.options.onOpenEnd === 'function') {
             this.options.onOpenEnd.call(this, this.el, this._openingTrigger);
           }
-        }
+        },
       };
 
       // Bottom sheet animation
       if (this.el.classList.contains('bottom-sheet')) {
         $.extend(enterAnimOptions, {
           bottom: 0,
-          opacity: 1
+          opacity: 1,
         });
         anim(enterAnimOptions);
 
@@ -222,7 +220,7 @@
           top: [this.options.startingTop, this.options.endingTop],
           opacity: 1,
           scaleX: [0.8, 1],
-          scaleY: [0.8, 1]
+          scaleY: [0.8, 1],
         });
         anim(enterAnimOptions);
       }
@@ -237,11 +235,11 @@
         targets: this.$overlay[0],
         opacity: 0,
         duration: this.options.outDuration,
-        easing: 'easeOutQuart'
+        easing: 'easeOutQuart',
       });
 
       // Define modal animation options
-      let exitAnimOptions = {
+      const exitAnimOptions = {
         targets: this.el,
         duration: this.options.outDuration,
         easing: 'easeOutCubic',
@@ -254,14 +252,14 @@
           if (typeof this.options.onCloseEnd === 'function') {
             this.options.onCloseEnd.call(this, this.el);
           }
-        }
+        },
       };
 
       // Bottom sheet animation
       if (this.el.classList.contains('bottom-sheet')) {
         $.extend(exitAnimOptions, {
           bottom: '-100%',
-          opacity: 0
+          opacity: 0,
         });
         anim(exitAnimOptions);
 
@@ -271,7 +269,7 @@
           top: [this.options.endingTop, this.options.startingTop],
           opacity: 0,
           scaleX: 0.8,
-          scaleY: 0.8
+          scaleY: 0.8,
         });
         anim(exitAnimOptions);
       }
@@ -295,7 +293,7 @@
       this.el.style.zIndex = 1000 + Modal._modalsOpen * 2 + 1;
 
       // Set opening trigger, undefined indicates modal was opened by javascript
-      this._openingTrigger = !!$trigger ? $trigger[0] : undefined;
+      this._openingTrigger = $trigger ? $trigger[0] : undefined;
 
       // onOpenStart callback
       if (typeof this.options.onOpenStart === 'function') {
@@ -379,4 +377,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Modal, 'modal', 'M_Modal');
   }
-})(cash, M.anime);
+}(cash, M.anime));

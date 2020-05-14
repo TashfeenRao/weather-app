@@ -1,7 +1,5 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     exitDelay: 200,
     enterDelay: 0,
     html: null,
@@ -9,7 +7,7 @@
     inDuration: 250,
     outDuration: 200,
     position: 'bottom',
-    transitionMovement: 10
+    transitionMovement: 10,
   };
 
   /**
@@ -48,7 +46,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Tooltip;
     }
 
@@ -62,11 +60,11 @@
     }
 
     _appendTooltipEl() {
-      let tooltipEl = document.createElement('div');
+      const tooltipEl = document.createElement('div');
       tooltipEl.classList.add('material-tooltip');
       this.tooltipEl = tooltipEl;
 
-      let tooltipContentEl = document.createElement('div');
+      const tooltipContentEl = document.createElement('div');
       tooltipContentEl.classList.add('tooltip-content');
       tooltipContentEl.innerHTML = this.options.html;
       tooltipEl.appendChild(tooltipContentEl);
@@ -149,16 +147,16 @@
     }
 
     _positionTooltip() {
-      let origin = this.el,
-        tooltip = this.tooltipEl,
-        originHeight = origin.offsetHeight,
-        originWidth = origin.offsetWidth,
-        tooltipHeight = tooltip.offsetHeight,
-        tooltipWidth = tooltip.offsetWidth,
-        newCoordinates,
-        margin = this.options.margin,
-        targetTop,
-        targetLeft;
+      const origin = this.el;
+      const tooltip = this.tooltipEl;
+      const originHeight = origin.offsetHeight;
+      const originWidth = origin.offsetWidth;
+      const tooltipHeight = tooltip.offsetHeight;
+      const tooltipWidth = tooltip.offsetWidth;
+      let newCoordinates;
+      const { margin } = this.options;
+      let targetTop;
+      let targetLeft;
 
       (this.xMovement = 0), (this.yMovement = 0);
 
@@ -187,29 +185,29 @@
         targetLeft,
         targetTop,
         tooltipWidth,
-        tooltipHeight
+        tooltipHeight,
       );
       $(tooltip).css({
-        top: newCoordinates.y + 'px',
-        left: newCoordinates.x + 'px'
+        top: `${newCoordinates.y}px`,
+        left: `${newCoordinates.x}px`,
       });
     }
 
     _repositionWithinScreen(x, y, width, height) {
-      let scrollLeft = M.getDocumentScrollLeft();
-      let scrollTop = M.getDocumentScrollTop();
+      const scrollLeft = M.getDocumentScrollLeft();
+      const scrollTop = M.getDocumentScrollTop();
       let newX = x - scrollLeft;
       let newY = y - scrollTop;
 
-      let bounding = {
+      const bounding = {
         left: newX,
         top: newY,
-        width: width,
-        height: height
+        width,
+        height,
       };
 
-      let offset = this.options.margin + this.options.transitionMovement;
-      let edges = M.checkWithinContainer(document.body, bounding, offset);
+      const offset = this.options.margin + this.options.transitionMovement;
+      const edges = M.checkWithinContainer(document.body, bounding, offset);
 
       if (edges.left) {
         newX = offset;
@@ -225,7 +223,7 @@
 
       return {
         x: newX + scrollLeft,
-        y: newY + scrollTop
+        y: newY + scrollTop,
       };
     }
 
@@ -239,7 +237,7 @@
         translateX: this.xMovement,
         translateY: this.yMovement,
         duration: this.options.inDuration,
-        easing: 'easeOutCubic'
+        easing: 'easeOutCubic',
       });
     }
 
@@ -251,7 +249,7 @@
         translateX: 0,
         translateY: 0,
         duration: this.options.outDuration,
-        easing: 'easeOutCubic'
+        easing: 'easeOutCubic',
       });
     }
 
@@ -280,9 +278,9 @@
     }
 
     _getAttributeOptions() {
-      let attributeOptions = {};
-      let tooltipTextOption = this.el.getAttribute('data-tooltip');
-      let positionOption = this.el.getAttribute('data-position');
+      const attributeOptions = {};
+      const tooltipTextOption = this.el.getAttribute('data-tooltip');
+      const positionOption = this.el.getAttribute('data-position');
 
       if (tooltipTextOption) {
         attributeOptions.html = tooltipTextOption;
@@ -300,4 +298,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Tooltip, 'tooltip', 'M_Tooltip');
   }
-})(cash, M.anime);
+}(cash, M.anime));

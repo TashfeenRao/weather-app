@@ -1,7 +1,5 @@
-(function($) {
-  'use strict';
-
-  let _defaults = {};
+(function ($) {
+  const _defaults = {};
 
   /**
    * @class
@@ -42,7 +40,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_CharacterCounter;
     }
 
@@ -83,7 +81,7 @@
         .css({
           float: 'right',
           'font-size': '12px',
-          height: 1
+          height: 1,
         });
 
       this.$el.parent().append(this.counterEl);
@@ -100,13 +98,13 @@
      * Update counter
      */
     updateCounter() {
-      let maxLength = +this.$el.attr('data-length'),
-        actualLength = this.el.value.length;
+      const maxLength = +this.$el.attr('data-length');
+      const actualLength = this.el.value.length;
       this.isValidLength = actualLength <= maxLength;
       let counterString = actualLength;
 
       if (maxLength) {
-        counterString += '/' + maxLength;
+        counterString += `/${maxLength}`;
         this._validateInput();
       }
 
@@ -133,4 +131,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(CharacterCounter, 'characterCounter', 'M_CharacterCounter');
   }
-})(cash);
+}(cash));

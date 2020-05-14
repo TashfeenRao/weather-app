@@ -1,7 +1,5 @@
-(function($) {
-  'use strict';
-
-  let _defaults = {
+(function ($) {
+  const _defaults = {
     // Close when date is selected
     autoClose: false,
 
@@ -74,7 +72,7 @@
         'September',
         'October',
         'November',
-        'December'
+        'December',
       ],
       monthsShort: [
         'Jan',
@@ -88,11 +86,11 @@
         'Sep',
         'Oct',
         'Nov',
-        'Dec'
+        'Dec',
       ],
       weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      weekdaysAbbrev: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+      weekdaysAbbrev: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
     },
 
     // events array
@@ -102,7 +100,7 @@
     onSelect: null,
     onOpen: null,
     onClose: null,
-    onDraw: null
+    onDraw: null,
   };
 
   /**
@@ -144,7 +142,7 @@
         this.options.defaultDate = new Date(Date.parse(this.el.value));
       }
 
-      let defDate = this.options.defaultDate;
+      const defDate = this.options.defaultDate;
       if (Datepicker._isDate(defDate)) {
         if (this.options.setDefaultDate) {
           this.setDate(defDate, true);
@@ -176,7 +174,7 @@
     }
 
     static _isWeekend(date) {
-      let day = date.getDay();
+      const day = date.getDay();
       return day === 0 || day === 6;
     }
 
@@ -208,7 +206,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Datepicker;
     }
 
@@ -224,11 +222,11 @@
     }
 
     destroySelects() {
-      let oldYearSelect = this.calendarEl.querySelector('.orig-select-year');
+      const oldYearSelect = this.calendarEl.querySelector('.orig-select-year');
       if (oldYearSelect) {
         M.FormSelect.getInstance(oldYearSelect).destroy();
       }
-      let oldMonthSelect = this.calendarEl.querySelector('.orig-select-month');
+      const oldMonthSelect = this.calendarEl.querySelector('.orig-select-month');
       if (oldMonthSelect) {
         M.FormSelect.getInstance(oldMonthSelect).destroy();
       }
@@ -251,11 +249,11 @@
     }
 
     _setupModal() {
-      this.modalEl.id = 'modal-' + this.id;
+      this.modalEl.id = `modal-${this.id}`;
       this.modal = M.Modal.init(this.modalEl, {
         onCloseEnd: () => {
           this.isOpen = false;
-        }
+        },
       });
     }
 
@@ -265,8 +263,8 @@
         return '';
       }
 
-      let formatArray = format.split(/(d{1,4}|m{1,4}|y{4}|yy|!.)/g);
-      let formattedDate = formatArray
+      const formatArray = format.split(/(d{1,4}|m{1,4}|y{4}|yy|!.)/g);
+      const formattedDate = formatArray
         .map((label) => {
           if (this.formats[label]) {
             return this.formats[label]();
@@ -291,8 +289,8 @@
         return;
       }
 
-      let min = this.options.minDate,
-        max = this.options.maxDate;
+      const min = this.options.minDate;
+      const max = this.options.maxDate;
 
       if (Datepicker._isDate(min) && date < min) {
         date = min;
@@ -318,11 +316,11 @@
     }
 
     _renderDateDisplay() {
-      let displayDate = Datepicker._isDate(this.date) ? this.date : new Date();
-      let i18n = this.options.i18n;
-      let day = i18n.weekdaysShort[displayDate.getDay()];
-      let month = i18n.monthsShort[displayDate.getMonth()];
-      let date = displayDate.getDate();
+      const displayDate = Datepicker._isDate(this.date) ? this.date : new Date();
+      const { i18n } = this.options;
+      const day = i18n.weekdaysShort[displayDate.getDay()];
+      const month = i18n.monthsShort[displayDate.getMonth()];
+      const date = displayDate.getDate();
       this.yearTextEl.innerHTML = displayDate.getFullYear();
       this.dateTextEl.innerHTML = `${day}, ${month} ${date}`;
     }
@@ -338,26 +336,25 @@
       }
 
       if (this.calendars) {
-        let firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1),
-          lastVisibleDate = new Date(
-            this.calendars[this.calendars.length - 1].year,
-            this.calendars[this.calendars.length - 1].month,
-            1
-          ),
-          visibleDate = date.getTime();
+        const firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1);
+        const lastVisibleDate = new Date(
+          this.calendars[this.calendars.length - 1].year,
+          this.calendars[this.calendars.length - 1].month,
+          1,
+        );
+        const visibleDate = date.getTime();
         // get the end of the month
         lastVisibleDate.setMonth(lastVisibleDate.getMonth() + 1);
         lastVisibleDate.setDate(lastVisibleDate.getDate() - 1);
-        newCalendar =
-          visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate;
+        newCalendar = visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate;
       }
 
       if (newCalendar) {
         this.calendars = [
           {
             month: date.getMonth(),
-            year: date.getFullYear()
-          }
+            year: date.getFullYear(),
+          },
         ];
       }
 
@@ -392,12 +389,12 @@
     }
 
     render(year, month, randId) {
-      let opts = this.options,
-        now = new Date(),
-        days = Datepicker._getDaysInMonth(year, month),
-        before = new Date(year, month, 1).getDay(),
-        data = [],
-        row = [];
+      const opts = this.options;
+      const now = new Date();
+      const days = Datepicker._getDaysInMonth(year, month);
+      let before = new Date(year, month, 1).getDay();
+      const data = [];
+      let row = [];
       Datepicker._setToStartOfDay(now);
       if (opts.firstDay > 0) {
         before -= opts.firstDay;
@@ -405,38 +402,36 @@
           before += 7;
         }
       }
-      let previousMonth = month === 0 ? 11 : month - 1,
-        nextMonth = month === 11 ? 0 : month + 1,
-        yearOfPreviousMonth = month === 0 ? year - 1 : year,
-        yearOfNextMonth = month === 11 ? year + 1 : year,
-        daysInPreviousMonth = Datepicker._getDaysInMonth(yearOfPreviousMonth, previousMonth);
-      let cells = days + before,
-        after = cells;
+      const previousMonth = month === 0 ? 11 : month - 1;
+      const nextMonth = month === 11 ? 0 : month + 1;
+      const yearOfPreviousMonth = month === 0 ? year - 1 : year;
+      const yearOfNextMonth = month === 11 ? year + 1 : year;
+      const daysInPreviousMonth = Datepicker._getDaysInMonth(yearOfPreviousMonth, previousMonth);
+      let cells = days + before;
+      let after = cells;
       while (after > 7) {
         after -= 7;
       }
       cells += 7 - after;
       let isWeekSelected = false;
       for (let i = 0, r = 0; i < cells; i++) {
-        let day = new Date(year, month, 1 + (i - before)),
-          isSelected = Datepicker._isDate(this.date)
-            ? Datepicker._compareDates(day, this.date)
-            : false,
-          isToday = Datepicker._compareDates(day, now),
-          hasEvent = opts.events.indexOf(day.toDateString()) !== -1 ? true : false,
-          isEmpty = i < before || i >= days + before,
-          dayNumber = 1 + (i - before),
-          monthNumber = month,
-          yearNumber = year,
-          isStartRange = opts.startRange && Datepicker._compareDates(opts.startRange, day),
-          isEndRange = opts.endRange && Datepicker._compareDates(opts.endRange, day),
-          isInRange =
-            opts.startRange && opts.endRange && opts.startRange < day && day < opts.endRange,
-          isDisabled =
-            (opts.minDate && day < opts.minDate) ||
-            (opts.maxDate && day > opts.maxDate) ||
-            (opts.disableWeekends && Datepicker._isWeekend(day)) ||
-            (opts.disableDayFn && opts.disableDayFn(day));
+        const day = new Date(year, month, 1 + (i - before));
+        const isSelected = Datepicker._isDate(this.date)
+          ? Datepicker._compareDates(day, this.date)
+          : false;
+        const isToday = Datepicker._compareDates(day, now);
+        const hasEvent = opts.events.indexOf(day.toDateString()) !== -1;
+        const isEmpty = i < before || i >= days + before;
+        let dayNumber = 1 + (i - before);
+        let monthNumber = month;
+        let yearNumber = year;
+        const isStartRange = opts.startRange && Datepicker._compareDates(opts.startRange, day);
+        const isEndRange = opts.endRange && Datepicker._compareDates(opts.endRange, day);
+        const isInRange = opts.startRange && opts.endRange && opts.startRange < day && day < opts.endRange;
+        const isDisabled = (opts.minDate && day < opts.minDate)
+            || (opts.maxDate && day > opts.maxDate)
+            || (opts.disableWeekends && Datepicker._isWeekend(day))
+            || (opts.disableDayFn && opts.disableDayFn(day));
 
         if (isEmpty) {
           if (i < before) {
@@ -444,25 +439,25 @@
             monthNumber = previousMonth;
             yearNumber = yearOfPreviousMonth;
           } else {
-            dayNumber = dayNumber - days;
+            dayNumber -= days;
             monthNumber = nextMonth;
             yearNumber = yearOfNextMonth;
           }
         }
 
-        let dayConfig = {
+        const dayConfig = {
           day: dayNumber,
           month: monthNumber,
           year: yearNumber,
-          hasEvent: hasEvent,
-          isSelected: isSelected,
-          isToday: isToday,
-          isDisabled: isDisabled,
-          isEmpty: isEmpty,
-          isStartRange: isStartRange,
-          isEndRange: isEndRange,
-          isInRange: isInRange,
-          showDaysInNextAndPreviousMonths: opts.showDaysInNextAndPreviousMonths
+          hasEvent,
+          isSelected,
+          isToday,
+          isDisabled,
+          isEmpty,
+          isStartRange,
+          isEndRange,
+          isInRange,
+          showDaysInNextAndPreviousMonths: opts.showDaysInNextAndPreviousMonths,
         };
 
         row.push(this.renderDay(dayConfig));
@@ -478,7 +473,7 @@
     }
 
     renderDay(opts) {
-      let arr = [];
+      const arr = [];
       let ariaSelected = 'false';
       if (opts.isEmpty) {
         if (opts.showDaysInNextAndPreviousMonths) {
@@ -512,89 +507,87 @@
         arr.push('is-endrange');
       }
       return (
-        `<td data-day="${opts.day}" class="${arr.join(' ')}" aria-selected="${ariaSelected}">` +
-        `<button class="datepicker-day-button" type="button" data-year="${opts.year}" data-month="${
+        `<td data-day="${opts.day}" class="${arr.join(' ')}" aria-selected="${ariaSelected}">`
+        + `<button class="datepicker-day-button" type="button" data-year="${opts.year}" data-month="${
           opts.month
-        }" data-day="${opts.day}">${opts.day}</button>` +
-        '</td>'
+        }" data-day="${opts.day}">${opts.day}</button>`
+        + '</td>'
       );
     }
 
     renderRow(days, isRTL, isRowSelected) {
       return (
-        '<tr class="datepicker-row' +
-        (isRowSelected ? ' is-selected' : '') +
-        '">' +
-        (isRTL ? days.reverse() : days).join('') +
-        '</tr>'
+        `<tr class="datepicker-row${
+          isRowSelected ? ' is-selected' : ''
+        }">${
+          (isRTL ? days.reverse() : days).join('')
+        }</tr>`
       );
     }
 
     renderTable(opts, data, randId) {
       return (
-        '<div class="datepicker-table-wrapper"><table cellpadding="0" cellspacing="0" class="datepicker-table" role="grid" aria-labelledby="' +
-        randId +
-        '">' +
-        this.renderHead(opts) +
-        this.renderBody(data) +
-        '</table></div>'
+        `<div class="datepicker-table-wrapper"><table cellpadding="0" cellspacing="0" class="datepicker-table" role="grid" aria-labelledby="${
+          randId
+        }">${
+          this.renderHead(opts)
+        }${this.renderBody(data)
+        }</table></div>`
       );
     }
 
     renderHead(opts) {
-      let i,
-        arr = [];
+      let i;
+      const arr = [];
       for (i = 0; i < 7; i++) {
         arr.push(
           `<th scope="col"><abbr title="${this.renderDayName(opts, i)}">${this.renderDayName(
             opts,
             i,
-            true
-          )}</abbr></th>`
+            true,
+          )}</abbr></th>`,
         );
       }
-      return '<thead><tr>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</tr></thead>';
+      return `<thead><tr>${(opts.isRTL ? arr.reverse() : arr).join('')}</tr></thead>`;
     }
 
     renderBody(rows) {
-      return '<tbody>' + rows.join('') + '</tbody>';
+      return `<tbody>${rows.join('')}</tbody>`;
     }
 
     renderTitle(instance, c, year, month, refYear, randId) {
-      let i,
-        j,
-        arr,
-        opts = this.options,
-        isMinYear = year === opts.minYear,
-        isMaxYear = year === opts.maxYear,
-        html =
-          '<div id="' +
-          randId +
-          '" class="datepicker-controls" role="heading" aria-live="assertive">',
-        monthHtml,
-        yearHtml,
-        prev = true,
-        next = true;
+      let i;
+      let j;
+      let arr;
+      const opts = this.options;
+      const isMinYear = year === opts.minYear;
+      const isMaxYear = year === opts.maxYear;
+      let html = `<div id="${
+        randId
+      }" class="datepicker-controls" role="heading" aria-live="assertive">`;
+      let monthHtml;
+      let yearHtml;
+      let prev = true;
+      let next = true;
 
       for (arr = [], i = 0; i < 12; i++) {
         arr.push(
-          '<option value="' +
-            (year === refYear ? i - c : 12 + i - c) +
-            '"' +
-            (i === month ? ' selected="selected"' : '') +
-            ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth)
-              ? 'disabled="disabled"'
-              : '') +
-            '>' +
-            opts.i18n.months[i] +
-            '</option>'
+          `<option value="${
+            year === refYear ? i - c : 12 + i - c
+          }"${
+            i === month ? ' selected="selected"' : ''
+          }${(isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth)
+            ? 'disabled="disabled"'
+            : ''
+          }>${
+            opts.i18n.months[i]
+          }</option>`,
         );
       }
 
-      monthHtml =
-        '<select class="datepicker-select orig-select-month" tabindex="-1">' +
-        arr.join('') +
-        '</select>';
+      monthHtml = `<select class="datepicker-select orig-select-month" tabindex="-1">${
+        arr.join('')
+      }</select>`;
 
       if ($.isArray(opts.yearRange)) {
         i = opts.yearRange[0];
@@ -611,11 +604,10 @@
       }
 
       yearHtml = `<select class="datepicker-select orig-select-year" tabindex="-1">${arr.join(
-        ''
+        '',
       )}</select>`;
 
-      let leftArrow =
-        '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/><path d="M0-.5h24v24H0z" fill="none"/></svg>';
+      const leftArrow = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/><path d="M0-.5h24v24H0z" fill="none"/></svg>';
       html += `<button class="month-prev${
         prev ? '' : ' is-disabled'
       }" type="button">${leftArrow}</button>`;
@@ -636,8 +628,7 @@
         next = false;
       }
 
-      let rightArrow =
-        '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/><path d="M0-.25h24v24H0z" fill="none"/></svg>';
+      const rightArrow = '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/><path d="M0-.25h24v24H0z" fill="none"/></svg>';
       html += `<button class="month-next${
         next ? '' : ' is-disabled'
       }" type="button">${rightArrow}</button>`;
@@ -652,13 +643,13 @@
       if (!this.isOpen && !force) {
         return;
       }
-      let opts = this.options,
-        minYear = opts.minYear,
-        maxYear = opts.maxYear,
-        minMonth = opts.minMonth,
-        maxMonth = opts.maxMonth,
-        html = '',
-        randId;
+      const opts = this.options;
+      const { minYear } = opts;
+      const { maxYear } = opts;
+      const { minMonth } = opts;
+      const { maxMonth } = opts;
+      let html = '';
+      let randId;
 
       if (this._y <= minYear) {
         this._y = minYear;
@@ -673,23 +664,22 @@
         }
       }
 
-      randId =
-        'datepicker-title-' +
+      randId = `datepicker-title-${
         Math.random()
           .toString(36)
           .replace(/[^a-z]+/g, '')
-          .substr(0, 2);
+          .substr(0, 2)}`;
 
       for (let c = 0; c < 1; c++) {
         this._renderDateDisplay();
-        html +=
-          this.renderTitle(
+        html
+          += this.renderTitle(
             this,
             c,
             this.calendars[c].year,
             this.calendars[c].month,
             this.calendars[0].year,
-            randId
+            randId,
           ) + this.render(this.calendars[c].year, this.calendars[c].month, randId);
       }
 
@@ -698,15 +688,15 @@
       this.calendarEl.innerHTML = html;
 
       // Init Materialize Select
-      let yearSelect = this.calendarEl.querySelector('.orig-select-year');
-      let monthSelect = this.calendarEl.querySelector('.orig-select-month');
+      const yearSelect = this.calendarEl.querySelector('.orig-select-year');
+      const monthSelect = this.calendarEl.querySelector('.orig-select-month');
       M.FormSelect.init(yearSelect, {
         classes: 'select-year',
-        dropdownOptions: { container: document.body, constrainWidth: false }
+        dropdownOptions: { container: document.body, constrainWidth: false },
       });
       M.FormSelect.init(monthSelect, {
         classes: 'select-month',
-        dropdownOptions: { container: document.body, constrainWidth: false }
+        dropdownOptions: { container: document.body, constrainWidth: false },
       });
 
       // Add change handlers for select
@@ -758,38 +748,22 @@
       this.cancelBtn = this.modalEl.querySelector('.datepicker-cancel');
 
       this.formats = {
-        d: () => {
-          return this.date.getDate();
-        },
+        d: () => this.date.getDate(),
         dd: () => {
-          let d = this.date.getDate();
+          const d = this.date.getDate();
           return (d < 10 ? '0' : '') + d;
         },
-        ddd: () => {
-          return this.options.i18n.weekdaysShort[this.date.getDay()];
-        },
-        dddd: () => {
-          return this.options.i18n.weekdays[this.date.getDay()];
-        },
-        m: () => {
-          return this.date.getMonth() + 1;
-        },
+        ddd: () => this.options.i18n.weekdaysShort[this.date.getDay()],
+        dddd: () => this.options.i18n.weekdays[this.date.getDay()],
+        m: () => this.date.getMonth() + 1,
         mm: () => {
-          let m = this.date.getMonth() + 1;
+          const m = this.date.getMonth() + 1;
           return (m < 10 ? '0' : '') + m;
         },
-        mmm: () => {
-          return this.options.i18n.monthsShort[this.date.getMonth()];
-        },
-        mmmm: () => {
-          return this.options.i18n.months[this.date.getMonth()];
-        },
-        yy: () => {
-          return ('' + this.date.getFullYear()).slice(2);
-        },
-        yyyy: () => {
-          return this.date.getFullYear();
-        }
+        mmm: () => this.options.i18n.monthsShort[this.date.getMonth()],
+        mmmm: () => this.options.i18n.months[this.date.getMonth()],
+        yy: () => (`${this.date.getFullYear()}`).slice(2),
+        yyyy: () => this.date.getFullYear(),
       };
     }
 
@@ -819,19 +793,19 @@
         return;
       }
 
-      let $target = $(e.target);
+      const $target = $(e.target);
       if (!$target.hasClass('is-disabled')) {
         if (
-          $target.hasClass('datepicker-day-button') &&
-          !$target.hasClass('is-empty') &&
-          !$target.parent().hasClass('is-disabled')
+          $target.hasClass('datepicker-day-button')
+          && !$target.hasClass('is-empty')
+          && !$target.parent().hasClass('is-disabled')
         ) {
           this.setDate(
             new Date(
               e.target.getAttribute('data-year'),
               e.target.getAttribute('data-month'),
-              e.target.getAttribute('data-day')
-            )
+              e.target.getAttribute('data-day'),
+            ),
           );
           if (this.options.autoClose) {
             this._finishSelection();
@@ -964,7 +938,7 @@
     '</div>',
     '</div>',
     '</div>',
-    '</div>'
+    '</div>',
   ].join('');
 
   M.Datepicker = Datepicker;
@@ -972,4 +946,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Datepicker, 'datepicker', 'M_Datepicker');
   }
-})(cash);
+}(cash));

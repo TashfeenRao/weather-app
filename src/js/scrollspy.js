@@ -1,13 +1,11 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     throttle: 100,
     scrollOffset: 200, // offset - 200 allows elements near bottom of page to scroll
     activeClass: 'active',
-    getActiveElement: function(id) {
-      return 'a[href="#' + id + '"]';
-    }
+    getActiveElement(id) {
+      return `a[href="#${id}"]`;
+    },
   };
 
   /**
@@ -58,7 +56,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_ScrollSpy;
     }
 
@@ -79,7 +77,7 @@
      * Setup Event Handlers
      */
     _setupEventHandlers() {
-      let throttledResize = M.throttle(this._handleWindowScroll, 200);
+      const throttledResize = M.throttle(this._handleWindowScroll, 200);
       this._handleThrottledResizeBound = throttledResize.bind(this);
       this._handleWindowScrollBound = this._handleWindowScroll.bind(this);
       if (ScrollSpy._count === 1) {
@@ -105,18 +103,18 @@
      * @param {Event} e
      */
     _handleTriggerClick(e) {
-      let $trigger = $(e.target);
+      const $trigger = $(e.target);
       for (let i = ScrollSpy._elements.length - 1; i >= 0; i--) {
-        let scrollspy = ScrollSpy._elements[i];
-        if ($trigger.is('a[href="#' + scrollspy.$el.attr('id') + '"]')) {
+        const scrollspy = ScrollSpy._elements[i];
+        if ($trigger.is(`a[href="#${scrollspy.$el.attr('id')}"]`)) {
           e.preventDefault();
-          let offset = scrollspy.$el.offset().top + 1;
+          const offset = scrollspy.$el.offset().top + 1;
 
           anim({
             targets: [document.documentElement, document.body],
             scrollTop: offset - scrollspy.options.scrollOffset,
             duration: 400,
-            easing: 'easeOutCubic'
+            easing: 'easeOutCubic',
           });
           break;
         }
@@ -131,16 +129,16 @@
       ScrollSpy._ticks++;
 
       // viewport rectangle
-      let top = M.getDocumentScrollTop(),
-        left = M.getDocumentScrollLeft(),
-        right = left + window.innerWidth,
-        bottom = top + window.innerHeight;
+      const top = M.getDocumentScrollTop();
+      const left = M.getDocumentScrollLeft();
+      const right = left + window.innerWidth;
+      const bottom = top + window.innerHeight;
 
       // determine which elements are in view
-      let intersections = ScrollSpy._findElements(top, right, bottom, left);
+      const intersections = ScrollSpy._findElements(top, right, bottom, left);
       for (let i = 0; i < intersections.length; i++) {
-        let scrollspy = intersections[i];
-        let lastTick = scrollspy.tickId;
+        const scrollspy = intersections[i];
+        const lastTick = scrollspy.tickId;
         if (lastTick < 0) {
           // entered into view
           scrollspy._enter();
@@ -151,8 +149,8 @@
       }
 
       for (let i = 0; i < ScrollSpy._elementsInView.length; i++) {
-        let scrollspy = ScrollSpy._elementsInView[i];
-        let lastTick = scrollspy.tickId;
+        const scrollspy = ScrollSpy._elementsInView[i];
+        const lastTick = scrollspy.tickId;
         if (lastTick >= 0 && lastTick !== ScrollSpy._ticks) {
           // exited from view
           scrollspy._exit();
@@ -173,22 +171,22 @@
      * @return {Array.<ScrollSpy>}   A collection of elements
      */
     static _findElements(top, right, bottom, left) {
-      let hits = [];
+      const hits = [];
       for (let i = 0; i < ScrollSpy._elements.length; i++) {
-        let scrollspy = ScrollSpy._elements[i];
-        let currTop = top + scrollspy.options.scrollOffset || 200;
+        const scrollspy = ScrollSpy._elements[i];
+        const currTop = top + scrollspy.options.scrollOffset || 200;
 
         if (scrollspy.$el.height() > 0) {
-          let elTop = scrollspy.$el.offset().top,
-            elLeft = scrollspy.$el.offset().left,
-            elRight = elLeft + scrollspy.$el.width(),
-            elBottom = elTop + scrollspy.$el.height();
+          const elTop = scrollspy.$el.offset().top;
+          const elLeft = scrollspy.$el.offset().left;
+          const elRight = elLeft + scrollspy.$el.width();
+          const elBottom = elTop + scrollspy.$el.height();
 
-          let isIntersect = !(
-            elLeft > right ||
-            elRight < left ||
-            elTop > bottom ||
-            elBottom < currTop
+          const isIntersect = !(
+            elLeft > right
+            || elRight < left
+            || elTop > bottom
+            || elBottom < currTop
           );
 
           if (isIntersect) {
@@ -200,17 +198,15 @@
     }
 
     _enter() {
-      ScrollSpy._visibleElements = ScrollSpy._visibleElements.filter(function(value) {
-        return value.height() != 0;
-      });
+      ScrollSpy._visibleElements = ScrollSpy._visibleElements.filter((value) => value.height() != 0);
 
       if (ScrollSpy._visibleElements[0]) {
         $(this.options.getActiveElement(ScrollSpy._visibleElements[0].attr('id'))).removeClass(
-          this.options.activeClass
+          this.options.activeClass,
         );
         if (
-          ScrollSpy._visibleElements[0][0].M_ScrollSpy &&
-          this.id < ScrollSpy._visibleElements[0][0].M_ScrollSpy.id
+          ScrollSpy._visibleElements[0][0].M_ScrollSpy
+          && this.id < ScrollSpy._visibleElements[0][0].M_ScrollSpy.id
         ) {
           ScrollSpy._visibleElements.unshift(this.$el);
         } else {
@@ -221,27 +217,23 @@
       }
 
       $(this.options.getActiveElement(ScrollSpy._visibleElements[0].attr('id'))).addClass(
-        this.options.activeClass
+        this.options.activeClass,
       );
     }
 
     _exit() {
-      ScrollSpy._visibleElements = ScrollSpy._visibleElements.filter(function(value) {
-        return value.height() != 0;
-      });
+      ScrollSpy._visibleElements = ScrollSpy._visibleElements.filter((value) => value.height() != 0);
 
       if (ScrollSpy._visibleElements[0]) {
         $(this.options.getActiveElement(ScrollSpy._visibleElements[0].attr('id'))).removeClass(
-          this.options.activeClass
+          this.options.activeClass,
         );
 
-        ScrollSpy._visibleElements = ScrollSpy._visibleElements.filter((el) => {
-          return el.attr('id') != this.$el.attr('id');
-        });
+        ScrollSpy._visibleElements = ScrollSpy._visibleElements.filter((el) => el.attr('id') != this.$el.attr('id'));
         if (ScrollSpy._visibleElements[0]) {
           // Check if empty
           $(this.options.getActiveElement(ScrollSpy._visibleElements[0].attr('id'))).addClass(
-            this.options.activeClass
+            this.options.activeClass,
           );
         }
       }
@@ -292,4 +284,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(ScrollSpy, 'scrollSpy', 'M_ScrollSpy');
   }
-})(cash, M.anime);
+}(cash, M.anime));

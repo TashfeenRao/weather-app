@@ -1,11 +1,9 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     duration: 300,
     onShow: null,
     swipeable: false,
-    responsiveThreshold: Infinity // breakpoint for swipeable
+    responsiveThreshold: Infinity, // breakpoint for swipeable
   };
 
   /**
@@ -65,7 +63,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Tabs;
     }
 
@@ -111,8 +109,8 @@
       this._setTabsAndTabWidth();
 
       if (this.tabWidth !== 0 && this.tabsWidth !== 0) {
-        this._indicator.style.left = this._calcLeftPos(this.$activeTabLink) + 'px';
-        this._indicator.style.right = this._calcRightPos(this.$activeTabLink) + 'px';
+        this._indicator.style.left = `${this._calcLeftPos(this.$activeTabLink)}px`;
+        this._indicator.style.right = `${this._calcRightPos(this.$activeTabLink)}px`;
       }
     }
 
@@ -121,8 +119,8 @@
      * @param {Event} e
      */
     _handleTabClick(e) {
-      let tab = $(e.target).closest('li.tab');
-      let tabLink = $(e.target).closest('a');
+      const tab = $(e.target).closest('li.tab');
+      const tabLink = $(e.target).closest('a');
 
       // Handle click on tab link only
       if (!tabLink.length || !tabLink.parent().hasClass('tab')) {
@@ -135,13 +133,13 @@
       }
 
       // Act as regular link if target attribute is specified.
-      if (!!tabLink.attr('target')) {
+      if (tabLink.attr('target')) {
         return;
       }
 
       // Make the old tab inactive.
       this.$activeTabLink.removeClass('active');
-      let $oldContent = this.$content;
+      const $oldContent = this.$content;
 
       // Update the variables with the new link and content
       this.$activeTabLink = tabLink;
@@ -150,7 +148,7 @@
 
       // Make the tab active.
       this.$activeTabLink.addClass('active');
-      let prevIndex = this.index;
+      const prevIndex = this.index;
       this.index = Math.max(this.$tabLinks.index(tabLink), 0);
 
       // Swap content
@@ -162,18 +160,16 @@
             }
           });
         }
-      } else {
-        if (this.$content.length) {
-          this.$content[0].style.display = 'block';
-          this.$content.addClass('active');
-          if (typeof this.options.onShow === 'function') {
-            this.options.onShow.call(this, this.$content[0]);
-          }
+      } else if (this.$content.length) {
+        this.$content[0].style.display = 'block';
+        this.$content.addClass('active');
+        if (typeof this.options.onShow === 'function') {
+          this.options.onShow.call(this, this.$content[0]);
+        }
 
-          if ($oldContent.length && !$oldContent.is(this.$content)) {
-            $oldContent[0].style.display = 'none';
-            $oldContent.removeClass('active');
-          }
+        if ($oldContent.length && !$oldContent.is(this.$content)) {
+          $oldContent[0].style.display = 'none';
+          $oldContent.removeClass('active');
         }
       }
 
@@ -191,15 +187,15 @@
      * Generate elements for tab indicator.
      */
     _createIndicator() {
-      let indicator = document.createElement('li');
+      const indicator = document.createElement('li');
       indicator.classList.add('indicator');
 
       this.el.appendChild(indicator);
       this._indicator = indicator;
 
       setTimeout(() => {
-        this._indicator.style.left = this._calcLeftPos(this.$activeTabLink) + 'px';
-        this._indicator.style.right = this._calcRightPos(this.$activeTabLink) + 'px';
+        this._indicator.style.left = `${this._calcLeftPos(this.$activeTabLink)}px`;
+        this._indicator.style.right = `${this._calcRightPos(this.$activeTabLink)}px`;
       }, 0);
     }
 
@@ -208,7 +204,7 @@
      */
     _setupActiveTabLink() {
       // If the location.hash matches one of the links, use that as the active tab.
-      this.$activeTabLink = $(this.$tabLinks.filter('[href="' + location.hash + '"]'));
+      this.$activeTabLink = $(this.$tabLinks.filter(`[href="${location.hash}"]`));
 
       // If no match is found, use the first link or any with class 'active' as the initial active tab.
       if (this.$activeTabLink.length === 0) {
@@ -246,24 +242,24 @@
 
       let $tabsContent = $();
       this.$tabLinks.each((link) => {
-        let $currContent = $(M.escapeHash(link.hash));
+        const $currContent = $(M.escapeHash(link.hash));
         $currContent.addClass('carousel-item');
         $tabsContent = $tabsContent.add($currContent);
       });
 
-      let $tabsWrapper = $('<div class="tabs-content carousel carousel-slider"></div>');
+      const $tabsWrapper = $('<div class="tabs-content carousel carousel-slider"></div>');
       $tabsContent.first().before($tabsWrapper);
       $tabsWrapper.append($tabsContent);
       $tabsContent[0].style.display = '';
 
       // Keep active tab index to set initial carousel slide
-      let activeTabIndex = this.$activeTabLink.closest('.tab').index();
+      const activeTabIndex = this.$activeTabLink.closest('.tab').index();
 
       this._tabsCarousel = M.Carousel.init($tabsWrapper[0], {
         fullWidth: true,
         noWrap: true,
         onCycleTo: (item) => {
-          let prevIndex = this.index;
+          const prevIndex = this.index;
           this.index = $(item).index();
           this.$activeTabLink.removeClass('active');
           this.$activeTabLink = this.$tabLinks.eq(this.index);
@@ -272,7 +268,7 @@
           if (typeof this.options.onShow === 'function') {
             this.options.onShow.call(this, this.$content[0]);
           }
-        }
+        },
       });
 
       // Set initial carousel slide to active tab
@@ -283,7 +279,7 @@
      * Teardown normal tabs.
      */
     _teardownSwipeableTabs() {
-      let $tabsWrapper = this._tabsCarousel.$el;
+      const $tabsWrapper = this._tabsCarousel.$el;
       this._tabsCarousel.destroy();
 
       // Unwrap
@@ -297,8 +293,8 @@
     _setupNormalTabs() {
       // Hide Tabs Content
       this.$tabLinks.not(this.$activeTabLink).each((link) => {
-        if (!!link.hash) {
-          let $currContent = $(M.escapeHash(link.hash));
+        if (link.hash) {
+          const $currContent = $(M.escapeHash(link.hash));
           if ($currContent.length) {
             $currContent[0].style.display = 'none';
           }
@@ -312,8 +308,8 @@
     _teardownNormalTabs() {
       // show Tabs Content
       this.$tabLinks.each((link) => {
-        if (!!link.hash) {
-          let $currContent = $(M.escapeHash(link.hash));
+        if (link.hash) {
+          const $currContent = $(M.escapeHash(link.hash));
           if ($currContent.length) {
             $currContent[0].style.display = '';
           }
@@ -355,8 +351,8 @@
      * @param {Number} prevIndex
      */
     _animateIndicator(prevIndex) {
-      let leftDelay = 0,
-        rightDelay = 0;
+      let leftDelay = 0;
+      let rightDelay = 0;
 
       if (this.index - prevIndex >= 0) {
         leftDelay = 90;
@@ -365,18 +361,18 @@
       }
 
       // Animate
-      let animOptions = {
+      const animOptions = {
         targets: this._indicator,
         left: {
           value: this._calcLeftPos(this.$activeTabLink),
-          delay: leftDelay
+          delay: leftDelay,
         },
         right: {
           value: this._calcRightPos(this.$activeTabLink),
-          delay: rightDelay
+          delay: rightDelay,
         },
         duration: this.options.duration,
-        easing: 'easeOutQuad'
+        easing: 'easeOutQuad',
       };
       anim.remove(this._indicator);
       anim(animOptions);
@@ -387,7 +383,7 @@
      * @param {String} tabId
      */
     select(tabId) {
-      let tab = this.$tabLinks.filter('[href="#' + tabId + '"]');
+      const tab = this.$tabLinks.filter(`[href="#${tabId}"]`);
       if (tab.length) {
         tab.trigger('click');
       }
@@ -399,4 +395,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Tabs, 'tabs', 'M_Tabs');
   }
-})(cash, M.anime);
+}(cash, M.anime));

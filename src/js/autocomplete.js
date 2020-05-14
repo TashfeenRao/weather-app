@@ -1,15 +1,13 @@
-(function($) {
-  'use strict';
-
-  let _defaults = {
+(function ($) {
+  const _defaults = {
     data: {}, // Autocomplete data set
     limit: Infinity, // Limit of results the autocomplete shows
     onAutocomplete: null, // Callback for when autocompleted
     minLength: 1, // Min characters before autocomplete starts
-    sortFunction: function(a, b, inputString) {
+    sortFunction(a, b, inputString) {
       // Sort function for sorting autocomplete results
       return a.indexOf(inputString) - b.indexOf(inputString);
-    }
+    },
   };
 
   /**
@@ -67,7 +65,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Autocomplete;
     }
 
@@ -89,10 +87,10 @@
       this._handleInputKeydownBound = this._handleInputKeydown.bind(this);
       this._handleInputClickBound = this._handleInputClick.bind(this);
       this._handleContainerMousedownAndTouchstartBound = this._handleContainerMousedownAndTouchstart.bind(
-        this
+        this,
       );
       this._handleContainerMouseupAndTouchendBound = this._handleContainerMouseupAndTouchend.bind(
-        this
+        this,
       );
 
       this.el.addEventListener('blur', this._handleInputBlurBound);
@@ -102,14 +100,14 @@
       this.el.addEventListener('click', this._handleInputClickBound);
       this.container.addEventListener(
         'mousedown',
-        this._handleContainerMousedownAndTouchstartBound
+        this._handleContainerMousedownAndTouchstartBound,
       );
       this.container.addEventListener('mouseup', this._handleContainerMouseupAndTouchendBound);
 
       if (typeof window.ontouchstart !== 'undefined') {
         this.container.addEventListener(
           'touchstart',
-          this._handleContainerMousedownAndTouchstartBound
+          this._handleContainerMousedownAndTouchstartBound,
         );
         this.container.addEventListener('touchend', this._handleContainerMouseupAndTouchendBound);
       }
@@ -126,18 +124,18 @@
       this.el.removeEventListener('click', this._handleInputClickBound);
       this.container.removeEventListener(
         'mousedown',
-        this._handleContainerMousedownAndTouchstartBound
+        this._handleContainerMousedownAndTouchstartBound,
       );
       this.container.removeEventListener('mouseup', this._handleContainerMouseupAndTouchendBound);
 
       if (typeof window.ontouchstart !== 'undefined') {
         this.container.removeEventListener(
           'touchstart',
-          this._handleContainerMousedownAndTouchstartBound
+          this._handleContainerMousedownAndTouchstartBound,
         );
         this.container.removeEventListener(
           'touchend',
-          this._handleContainerMouseupAndTouchendBound
+          this._handleContainerMouseupAndTouchendBound,
         );
       }
     }
@@ -158,7 +156,7 @@
         coverTrigger: false,
         onItemClick: (itemEl) => {
           this.selectOption($(itemEl));
-        }
+        },
       });
 
       // Sketchy removal of dropdown click handler
@@ -192,7 +190,7 @@
       }
 
       this.count = 0;
-      let val = this.el.value.toLowerCase();
+      const val = this.el.value.toLowerCase();
 
       // Don't capture enter or arrow key usage.
       if (e.keyCode === 13 || e.keyCode === 38 || e.keyCode === 40) {
@@ -217,9 +215,9 @@
       Autocomplete._keydown = true;
 
       // Arrow keys and enter key usage
-      let keyCode = e.keyCode,
-        liElement,
-        numItems = $(this.container).children('li').length;
+      const { keyCode } = e;
+      let liElement;
+      const numItems = $(this.container).children('li').length;
 
       // select element on Enter
       if (keyCode === M.keys.ENTER && this.activeIndex >= 0) {
@@ -283,17 +281,17 @@
      * Highlight partial match
      */
     _highlight(string, $el) {
-      let img = $el.find('img');
-      let matchStart = $el
-          .text()
-          .toLowerCase()
-          .indexOf('' + string.toLowerCase() + ''),
-        matchEnd = matchStart + string.length - 1,
-        beforeMatch = $el.text().slice(0, matchStart),
-        matchText = $el.text().slice(matchStart, matchEnd + 1),
-        afterMatch = $el.text().slice(matchEnd + 1);
+      const img = $el.find('img');
+      const matchStart = $el
+        .text()
+        .toLowerCase()
+        .indexOf(`${string.toLowerCase()}`);
+      const matchEnd = matchStart + string.length - 1;
+      const beforeMatch = $el.text().slice(0, matchStart);
+      const matchText = $el.text().slice(matchStart, matchEnd + 1);
+      const afterMatch = $el.text().slice(matchEnd + 1);
       $el.html(
-        `<span>${beforeMatch}<span class='highlight'>${matchText}</span>${afterMatch}</span>`
+        `<span>${beforeMatch}<span class='highlight'>${matchText}</span>${afterMatch}</span>`,
       );
       if (img.length) {
         $el.prepend(img);
@@ -324,7 +322,7 @@
      * @param {Element} el  Autocomplete option list item element
      */
     selectOption(el) {
-      let text = el.text().trim();
+      const text = el.text().trim();
       this.el.value = text;
       this.$el.trigger('change');
       this._resetAutocomplete();
@@ -344,19 +342,19 @@
     _renderDropdown(data, val) {
       this._resetAutocomplete();
 
-      let matchingData = [];
+      const matchingData = [];
 
       // Gather all matching data
-      for (let key in data) {
+      for (const key in data) {
         if (data.hasOwnProperty(key) && key.toLowerCase().indexOf(val) !== -1) {
           // Break if past limit
           if (this.count >= this.options.limit) {
             break;
           }
 
-          let entry = {
+          const entry = {
             data: data[key],
-            key: key
+            key,
           };
           matchingData.push(entry);
 
@@ -366,26 +364,24 @@
 
       // Sort
       if (this.options.sortFunction) {
-        let sortFunctionBound = (a, b) => {
-          return this.options.sortFunction(
-            a.key.toLowerCase(),
-            b.key.toLowerCase(),
-            val.toLowerCase()
-          );
-        };
+        const sortFunctionBound = (a, b) => this.options.sortFunction(
+          a.key.toLowerCase(),
+          b.key.toLowerCase(),
+          val.toLowerCase(),
+        );
         matchingData.sort(sortFunctionBound);
       }
 
       // Render
       for (let i = 0; i < matchingData.length; i++) {
-        let entry = matchingData[i];
-        let $autocompleteOption = $('<li></li>');
-        if (!!entry.data) {
+        const entry = matchingData[i];
+        const $autocompleteOption = $('<li></li>');
+        if (entry.data) {
           $autocompleteOption.append(
-            `<img src="${entry.data}" class="right circle"><span>${entry.key}</span>`
+            `<img src="${entry.data}" class="right circle"><span>${entry.key}</span>`,
           );
         } else {
-          $autocompleteOption.append('<span>' + entry.key + '</span>');
+          $autocompleteOption.append(`<span>${entry.key}</span>`);
         }
 
         $(this.container).append($autocompleteOption);
@@ -397,7 +393,7 @@
      * Open Autocomplete Dropdown
      */
     open() {
-      let val = this.el.value.toLowerCase();
+      const val = this.el.value.toLowerCase();
 
       this._resetAutocomplete();
 
@@ -427,7 +423,7 @@
      * @param {Object} data
      */
     updateData(data) {
-      let val = this.el.value.toLowerCase();
+      const val = this.el.value.toLowerCase();
       this.options.data = data;
 
       if (this.isOpen) {
@@ -447,4 +443,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Autocomplete, 'autocomplete', 'M_Autocomplete');
   }
-})(cash);
+}(cash));

@@ -1,10 +1,8 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     direction: 'top',
     hoverEnabled: true,
-    toolbarEnabled: false
+    toolbarEnabled: false,
   };
 
   $.fn.reverse = [].reverse;
@@ -67,7 +65,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_FloatingActionButton;
     }
 
@@ -178,7 +176,7 @@
           translateX: [this.offsetX, 0],
           duration: 275,
           delay: time,
-          easing: 'easeInOutQuad'
+          easing: 'easeInOutQuad',
         });
         time += 40;
       });
@@ -200,7 +198,7 @@
           easing: 'easeOutQuad',
           complete: () => {
             this.$el.removeClass('active');
-          }
+          },
         });
       });
     }
@@ -210,11 +208,11 @@
      */
     _animateInToolbar() {
       let scaleFactor;
-      let windowWidth = window.innerWidth;
-      let windowHeight = window.innerHeight;
-      let btnRect = this.el.getBoundingClientRect();
-      let backdrop = $('<div class="fab-backdrop"></div>');
-      let fabColor = this.$anchor.css('background-color');
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const btnRect = this.el.getBoundingClientRect();
+      const backdrop = $('<div class="fab-backdrop"></div>');
+      const fabColor = this.$anchor.css('background-color');
       this.$anchor.append(backdrop);
 
       this.offsetX = btnRect.left - windowWidth / 2 + btnRect.width / 2;
@@ -231,43 +229,43 @@
         width: '100%',
         bottom: 0,
         left: 0,
-        transform: 'translateX(' + this.offsetX + 'px)',
-        transition: 'none'
+        transform: `translateX(${this.offsetX}px)`,
+        transition: 'none',
       });
       this.$anchor.css({
-        transform: 'translateY(' + -this.offsetY + 'px)',
-        transition: 'none'
+        transform: `translateY(${-this.offsetY}px)`,
+        transition: 'none',
       });
       backdrop.css({
-        'background-color': fabColor
+        'background-color': fabColor,
       });
 
       setTimeout(() => {
         this.$el.css({
           transform: '',
           transition:
-            'transform .2s cubic-bezier(0.550, 0.085, 0.680, 0.530), background-color 0s linear .2s'
+            'transform .2s cubic-bezier(0.550, 0.085, 0.680, 0.530), background-color 0s linear .2s',
         });
         this.$anchor.css({
           overflow: 'visible',
           transform: '',
-          transition: 'transform .2s'
+          transition: 'transform .2s',
         });
 
         setTimeout(() => {
           this.$el.css({
             overflow: 'hidden',
-            'background-color': fabColor
+            'background-color': fabColor,
           });
           backdrop.css({
-            transform: 'scale(' + scaleFactor + ')',
-            transition: 'transform .2s cubic-bezier(0.550, 0.055, 0.675, 0.190)'
+            transform: `scale(${scaleFactor})`,
+            transition: 'transform .2s cubic-bezier(0.550, 0.055, 0.675, 0.190)',
           });
           this.$menu
             .children('li')
             .children('a')
             .css({
-              opacity: 1
+              opacity: 1,
             });
 
           // Scroll to close.
@@ -282,10 +280,10 @@
      * Toolbar transition Menu close
      */
     _animateOutToolbar() {
-      let windowWidth = window.innerWidth;
-      let windowHeight = window.innerHeight;
-      let backdrop = this.$el.find('.fab-backdrop');
-      let fabColor = this.$anchor.css('background-color');
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const backdrop = this.$el.find('.fab-backdrop');
+      const fabColor = this.$anchor.css('background-color');
 
       this.offsetX = this.btnLeft - windowWidth / 2 + this.btnWidth / 2;
       this.offsetY = windowHeight - this.btnBottom;
@@ -294,20 +292,20 @@
       this.$el.removeClass('active');
       this.$el.css({
         'background-color': 'transparent',
-        transition: 'none'
+        transition: 'none',
       });
       this.$anchor.css({
-        transition: 'none'
+        transition: 'none',
       });
       backdrop.css({
         transform: 'scale(0)',
-        'background-color': fabColor
+        'background-color': fabColor,
       });
       this.$menu
         .children('li')
         .children('a')
         .css({
-          opacity: ''
+          opacity: '',
         });
 
       setTimeout(() => {
@@ -321,21 +319,21 @@
           left: '',
           overflow: '',
           'background-color': '',
-          transform: 'translate3d(' + -this.offsetX + 'px,0,0)'
+          transform: `translate3d(${-this.offsetX}px,0,0)`,
         });
         this.$anchor.css({
           overflow: '',
-          transform: 'translate3d(0,' + this.offsetY + 'px,0)'
+          transform: `translate3d(0,${this.offsetY}px,0)`,
         });
 
         setTimeout(() => {
           this.$el.css({
             transform: 'translate3d(0,0,0)',
-            transition: 'transform .2s'
+            transition: 'transform .2s',
           });
           this.$anchor.css({
             transform: 'translate3d(0,0,0)',
-            transition: 'transform .2s cubic-bezier(0.550, 0.055, 0.675, 0.190)'
+            transition: 'transform .2s cubic-bezier(0.550, 0.055, 0.675, 0.190)',
           });
         }, 20);
       }, 200);
@@ -348,7 +346,7 @@
     M.initializeJqueryWrapper(
       FloatingActionButton,
       'floatingActionButton',
-      'M_FloatingActionButton'
+      'M_FloatingActionButton',
     );
   }
-})(cash, M.anime);
+}(cash, M.anime));

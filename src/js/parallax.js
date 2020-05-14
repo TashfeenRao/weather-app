@@ -1,8 +1,6 @@
-(function($) {
-  'use strict';
-
-  let _defaults = {
-    responsiveThreshold: 0 // breakpoint for swipeable
+(function ($) {
+  const _defaults = {
+    responsiveThreshold: 0, // breakpoint for swipeable
   };
 
   class Parallax extends Component {
@@ -20,8 +18,8 @@
       this._enabled = window.innerWidth > this.options.responsiveThreshold;
 
       this.$img = this.$el.find('img').first();
-      this.$img.each(function() {
-        let el = this;
+      this.$img.each(function () {
+        const el = this;
         if (el.complete) $(el).trigger('load');
       });
 
@@ -44,7 +42,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Parallax;
     }
 
@@ -61,16 +59,15 @@
 
     static _handleScroll() {
       for (let i = 0; i < Parallax._parallaxes.length; i++) {
-        let parallaxInstance = Parallax._parallaxes[i];
+        const parallaxInstance = Parallax._parallaxes[i];
         parallaxInstance._updateParallax.call(parallaxInstance);
       }
     }
 
     static _handleWindowResize() {
       for (let i = 0; i < Parallax._parallaxes.length; i++) {
-        let parallaxInstance = Parallax._parallaxes[i];
-        parallaxInstance._enabled =
-          window.innerWidth > parallaxInstance.options.responsiveThreshold;
+        const parallaxInstance = Parallax._parallaxes[i];
+        parallaxInstance._enabled = window.innerWidth > parallaxInstance.options.responsiveThreshold;
       }
     }
 
@@ -105,16 +102,16 @@
     }
 
     _updateParallax() {
-      let containerHeight = this.$el.height() > 0 ? this.el.parentNode.offsetHeight : 500;
-      let imgHeight = this.$img[0].offsetHeight;
-      let parallaxDist = imgHeight - containerHeight;
-      let bottom = this.$el.offset().top + containerHeight;
-      let top = this.$el.offset().top;
-      let scrollTop = M.getDocumentScrollTop();
-      let windowHeight = window.innerHeight;
-      let windowBottom = scrollTop + windowHeight;
-      let percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
-      let parallax = parallaxDist * percentScrolled;
+      const containerHeight = this.$el.height() > 0 ? this.el.parentNode.offsetHeight : 500;
+      const imgHeight = this.$img[0].offsetHeight;
+      const parallaxDist = imgHeight - containerHeight;
+      const bottom = this.$el.offset().top + containerHeight;
+      const { top } = this.$el.offset();
+      const scrollTop = M.getDocumentScrollTop();
+      const windowHeight = window.innerHeight;
+      const windowBottom = scrollTop + windowHeight;
+      const percentScrolled = (windowBottom - top) / (containerHeight + windowHeight);
+      const parallax = parallaxDist * percentScrolled;
 
       if (!this._enabled) {
         this.$img[0].style.transform = '';
@@ -135,4 +132,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Parallax, 'parallax', 'M_Parallax');
   }
-})(cash);
+}(cash));

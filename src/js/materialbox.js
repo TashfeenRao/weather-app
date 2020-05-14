@@ -1,13 +1,11 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     inDuration: 275,
     outDuration: 200,
     onOpenStart: null,
     onOpenEnd: null,
     onCloseStart: null,
-    onCloseEnd: null
+    onCloseEnd: null,
   };
 
   /**
@@ -65,7 +63,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Materialbox;
     }
 
@@ -148,7 +146,7 @@
       this.ancestorsChanged = $();
       let ancestor = this.placeholder[0].parentNode;
       while (ancestor !== null && !$(ancestor).is(document)) {
-        let curr = $(ancestor);
+        const curr = $(ancestor);
         if (curr.css('overflow') !== 'visible') {
           curr.css('overflow', 'visible');
           if (this.ancestorsChanged === undefined) {
@@ -165,20 +163,20 @@
      * Animate image in
      */
     _animateImageIn() {
-      let animOptions = {
+      const animOptions = {
         targets: this.el,
         height: [this.originalHeight, this.newHeight],
         width: [this.originalWidth, this.newWidth],
         left:
-          M.getDocumentScrollLeft() +
-          this.windowWidth / 2 -
-          this.placeholder.offset().left -
-          this.newWidth / 2,
+          M.getDocumentScrollLeft()
+          + this.windowWidth / 2
+          - this.placeholder.offset().left
+          - this.newWidth / 2,
         top:
-          M.getDocumentScrollTop() +
-          this.windowHeight / 2 -
-          this.placeholder.offset().top -
-          this.newHeight / 2,
+          M.getDocumentScrollTop()
+          + this.windowHeight / 2
+          - this.placeholder.offset().top
+          - this.newHeight / 2,
         duration: this.options.inDuration,
         easing: 'easeOutQuad',
         complete: () => {
@@ -188,7 +186,7 @@
           if (typeof this.options.onOpenEnd === 'function') {
             this.options.onOpenEnd.call(this, this.el);
           }
-        }
+        },
       };
 
       // Override max-width or max-height if needed
@@ -208,7 +206,7 @@
      * Animate image out
      */
     _animateImageOut() {
-      let animOptions = {
+      const animOptions = {
         targets: this.el,
         width: this.originalWidth,
         height: this.originalHeight,
@@ -222,7 +220,7 @@
             width: '',
             position: '',
             top: '',
-            left: ''
+            left: '',
           });
 
           // Revert to width or height attribute
@@ -249,7 +247,7 @@
           if (typeof this.options.onCloseEnd === 'function') {
             this.options.onCloseEnd.call(this, this.el);
           }
-        }
+        },
       };
 
       anim(animOptions);
@@ -284,11 +282,11 @@
 
       // Set positioning for placeholder
       this.placeholder.css({
-        width: this.placeholder[0].getBoundingClientRect().width + 'px',
-        height: this.placeholder[0].getBoundingClientRect().height + 'px',
+        width: `${this.placeholder[0].getBoundingClientRect().width}px`,
+        height: `${this.placeholder[0].getBoundingClientRect().height}px`,
         position: 'relative',
         top: 0,
-        left: 0
+        left: 0,
       });
 
       this._makeAncestorsOverflowVisible();
@@ -297,25 +295,25 @@
       this.$el.css({
         position: 'absolute',
         'z-index': 1000,
-        'will-change': 'left, top, width, height'
+        'will-change': 'left, top, width, height',
       });
 
       // Change from width or height attribute to css
       this.attrWidth = this.$el.attr('width');
       this.attrHeight = this.$el.attr('height');
       if (this.attrWidth) {
-        this.$el.css('width', this.attrWidth + 'px');
+        this.$el.css('width', `${this.attrWidth}px`);
         this.$el.removeAttr('width');
       }
       if (this.attrHeight) {
-        this.$el.css('width', this.attrHeight + 'px');
+        this.$el.css('width', `${this.attrHeight}px`);
         this.$el.removeAttr('height');
       }
 
       // Add overlay
       this.$overlay = $('<div id="materialbox-overlay"></div>')
         .css({
-          opacity: 0
+          opacity: 0,
         })
         .one('click', () => {
           if (this.doneAnimating) {
@@ -327,12 +325,12 @@
       this.$el.before(this.$overlay);
 
       // Set dimensions if needed
-      let overlayOffset = this.$overlay[0].getBoundingClientRect();
+      const overlayOffset = this.$overlay[0].getBoundingClientRect();
       this.$overlay.css({
-        width: this.windowWidth + 'px',
-        height: this.windowHeight + 'px',
-        left: -1 * overlayOffset.left + 'px',
-        top: -1 * overlayOffset.top + 'px'
+        width: `${this.windowWidth}px`,
+        height: `${this.windowHeight}px`,
+        left: `${-1 * overlayOffset.left}px`,
+        top: `${-1 * overlayOffset.top}px`,
       });
 
       anim.remove(this.el);
@@ -343,7 +341,7 @@
         targets: this.$overlay[0],
         opacity: 1,
         duration: this.options.inDuration,
-        easing: 'easeOutQuad'
+        easing: 'easeOutQuad',
       });
 
       // Add and animate caption if it exists
@@ -360,14 +358,14 @@
           targets: this.$photoCaption[0],
           opacity: 1,
           duration: this.options.inDuration,
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         });
       }
 
       // Resize Image
       let ratio = 0;
-      let widthPercent = this.originalWidth / this.windowWidth;
-      let heightPercent = this.originalHeight / this.windowHeight;
+      const widthPercent = this.originalWidth / this.windowWidth;
+      const heightPercent = this.originalHeight / this.windowHeight;
       this.newWidth = 0;
       this.newHeight = 0;
 
@@ -425,7 +423,7 @@
         complete: () => {
           this.overlayActive = false;
           this.$overlay.remove();
-        }
+        },
       });
 
       this._animateImageOut();
@@ -439,7 +437,7 @@
           easing: 'easeOutQuad',
           complete: () => {
             this.$photoCaption.remove();
-          }
+          },
         });
       }
     }
@@ -450,4 +448,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Materialbox, 'materialbox', 'M_Materialbox');
   }
-})(cash, M.anime);
+}(cash, M.anime));

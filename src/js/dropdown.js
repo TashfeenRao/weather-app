@@ -1,7 +1,5 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     alignment: 'left',
     autoFocus: true,
     constrainWidth: true,
@@ -15,7 +13,7 @@
     onOpenEnd: null,
     onCloseStart: null,
     onCloseEnd: null,
-    onItemClick: null
+    onItemClick: null,
   };
 
   /**
@@ -73,7 +71,7 @@
       this.filterQuery = [];
 
       // Move dropdown-content after dropdown-trigger
-      if (!!this.options.container) {
+      if (this.options.container) {
         $(this.options.container).append(this.dropdownEl);
       } else {
         this.$el.after(this.dropdownEl);
@@ -101,7 +99,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Dropdown;
     }
 
@@ -182,15 +180,15 @@
     }
 
     _handleMouseLeave(e) {
-      let toEl = e.toElement || e.relatedTarget;
-      let leaveToDropdownContent = !!$(toEl).closest('.dropdown-content').length;
+      const toEl = e.toElement || e.relatedTarget;
+      const leaveToDropdownContent = !!$(toEl).closest('.dropdown-content').length;
       let leaveToActiveDropdownTrigger = false;
 
-      let $closestTrigger = $(toEl).closest('.dropdown-trigger');
+      const $closestTrigger = $(toEl).closest('.dropdown-trigger');
       if (
-        $closestTrigger.length &&
-        !!$closestTrigger[0].M_Dropdown &&
-        $closestTrigger[0].M_Dropdown.isOpen
+        $closestTrigger.length
+        && !!$closestTrigger[0].M_Dropdown
+        && $closestTrigger[0].M_Dropdown.isOpen
       ) {
         leaveToActiveDropdownTrigger = true;
       }
@@ -202,19 +200,19 @@
     }
 
     _handleDocumentClick(e) {
-      let $target = $(e.target);
+      const $target = $(e.target);
       if (
-        this.options.closeOnClick &&
-        $target.closest('.dropdown-content').length &&
-        !this.isTouchMoving
+        this.options.closeOnClick
+        && $target.closest('.dropdown-content').length
+        && !this.isTouchMoving
       ) {
         // isTouchMoving to check if scrolling on mobile.
         setTimeout(() => {
           this.close();
         }, 0);
       } else if (
-        $target.closest('.dropdown-trigger').length ||
-        !$target.closest('.dropdown-content').length
+        $target.closest('.dropdown-trigger').length
+        || !$target.closest('.dropdown-content').length
       ) {
         setTimeout(() => {
           this.close();
@@ -236,7 +234,7 @@
      * @param {Event} e
      */
     _handleDocumentTouchmove(e) {
-      let $target = $(e.target);
+      const $target = $(e.target);
       if ($target.closest('.dropdown-content').length) {
         this.isTouchMoving = true;
       }
@@ -249,7 +247,7 @@
     _handleDropdownClick(e) {
       // onItemClick callback
       if (typeof this.options.onItemClick === 'function') {
-        let itemEl = $(e.target).closest('li')[0];
+        const itemEl = $(e.target).closest('li')[0];
         this.options.onItemClick.call(this, itemEl);
       }
     }
@@ -266,15 +264,15 @@
         // Navigate down dropdown list
       } else if ((e.which === M.keys.ARROW_DOWN || e.which === M.keys.ARROW_UP) && this.isOpen) {
         e.preventDefault();
-        let direction = e.which === M.keys.ARROW_DOWN ? 1 : -1;
+        const direction = e.which === M.keys.ARROW_DOWN ? 1 : -1;
         let newFocusedIndex = this.focusedIndex;
         let foundNewIndex = false;
         do {
-          newFocusedIndex = newFocusedIndex + direction;
+          newFocusedIndex += direction;
 
           if (
-            !!this.dropdownEl.children[newFocusedIndex] &&
-            this.dropdownEl.children[newFocusedIndex].tabIndex !== -1
+            !!this.dropdownEl.children[newFocusedIndex]
+            && this.dropdownEl.children[newFocusedIndex].tabIndex !== -1
           ) {
             foundNewIndex = true;
             break;
@@ -289,15 +287,15 @@
         // ENTER selects choice on focused item
       } else if (e.which === M.keys.ENTER && this.isOpen) {
         // Search for <a> and <button>
-        let focusedElement = this.dropdownEl.children[this.focusedIndex];
-        let $activatableElement = $(focusedElement)
+        const focusedElement = this.dropdownEl.children[this.focusedIndex];
+        const $activatableElement = $(focusedElement)
           .find('a, button')
           .first();
 
         // Click a or button tag if exists, otherwise click li tag
-        if (!!$activatableElement.length) {
+        if ($activatableElement.length) {
           $activatableElement[0].click();
-        } else if (!!focusedElement) {
+        } else if (focusedElement) {
           focusedElement.click();
         }
 
@@ -308,22 +306,20 @@
       }
 
       // CASE WHEN USER TYPE LETTERS
-      let letter = String.fromCharCode(e.which).toLowerCase(),
-        nonLetters = [9, 13, 27, 38, 40];
+      const letter = String.fromCharCode(e.which).toLowerCase();
+      const nonLetters = [9, 13, 27, 38, 40];
       if (letter && nonLetters.indexOf(e.which) === -1) {
         this.filterQuery.push(letter);
 
-        let string = this.filterQuery.join(''),
-          newOptionEl = $(this.dropdownEl)
-            .find('li')
-            .filter((el) => {
-              return (
-                $(el)
-                  .text()
-                  .toLowerCase()
-                  .indexOf(string) === 0
-              );
-            })[0];
+        const string = this.filterQuery.join('');
+        const newOptionEl = $(this.dropdownEl)
+          .find('li')
+          .filter((el) => (
+            $(el)
+              .text()
+              .toLowerCase()
+              .indexOf(string) === 0
+          ))[0];
 
         if (newOptionEl) {
           this.focusedIndex = $(newOptionEl).index();
@@ -350,7 +346,7 @@
         top: '',
         'transform-origin': '',
         transform: '',
-        opacity: ''
+        opacity: '',
       });
     }
 
@@ -361,7 +357,7 @@
       // Only set tabindex if it hasn't been set by user
       $(this.dropdownEl)
         .children()
-        .each(function(el) {
+        .each((el) => {
           if (!el.getAttribute('tabindex')) {
             el.setAttribute('tabindex', 0);
           }
@@ -370,41 +366,41 @@
 
     _focusFocusedItem() {
       if (
-        this.focusedIndex >= 0 &&
-        this.focusedIndex < this.dropdownEl.children.length &&
-        this.options.autoFocus
+        this.focusedIndex >= 0
+        && this.focusedIndex < this.dropdownEl.children.length
+        && this.options.autoFocus
       ) {
         this.dropdownEl.children[this.focusedIndex].focus();
       }
     }
 
     _getDropdownPosition() {
-      let offsetParentBRect = this.el.offsetParent.getBoundingClientRect();
-      let triggerBRect = this.el.getBoundingClientRect();
-      let dropdownBRect = this.dropdownEl.getBoundingClientRect();
+      const offsetParentBRect = this.el.offsetParent.getBoundingClientRect();
+      const triggerBRect = this.el.getBoundingClientRect();
+      const dropdownBRect = this.dropdownEl.getBoundingClientRect();
 
       let idealHeight = dropdownBRect.height;
       let idealWidth = dropdownBRect.width;
       let idealXPos = triggerBRect.left - dropdownBRect.left;
       let idealYPos = triggerBRect.top - dropdownBRect.top;
 
-      let dropdownBounds = {
+      const dropdownBounds = {
         left: idealXPos,
         top: idealYPos,
         height: idealHeight,
-        width: idealWidth
+        width: idealWidth,
       };
 
       // Countainer here will be closest ancestor with overflow: hidden
-      let closestOverflowParent = !!this.dropdownEl.offsetParent
+      const closestOverflowParent = this.dropdownEl.offsetParent
         ? this.dropdownEl.offsetParent
         : this.dropdownEl.parentNode;
 
-      let alignments = M.checkPossibleAlignments(
+      const alignments = M.checkPossibleAlignments(
         this.el,
         closestOverflowParent,
         dropdownBounds,
-        this.options.coverTrigger ? 0 : triggerBRect.height
+        this.options.coverTrigger ? 0 : triggerBRect.height,
       );
 
       let verticalAlignment = 'top';
@@ -433,7 +429,7 @@
 
       // If preferred horizontal alignment is possible
       if (!alignments[horizontalAlignment]) {
-        let oppositeAlignment = horizontalAlignment === 'left' ? 'right' : 'left';
+        const oppositeAlignment = horizontalAlignment === 'left' ? 'right' : 'left';
         if (alignments[oppositeAlignment]) {
           horizontalAlignment = oppositeAlignment;
         } else {
@@ -450,8 +446,7 @@
       }
 
       if (verticalAlignment === 'bottom') {
-        idealYPos =
-          idealYPos - dropdownBRect.height + (this.options.coverTrigger ? triggerBRect.height : 0);
+        idealYPos = idealYPos - dropdownBRect.height + (this.options.coverTrigger ? triggerBRect.height : 0);
       }
       if (horizontalAlignment === 'right') {
         idealXPos = idealXPos - dropdownBRect.width + triggerBRect.width;
@@ -459,10 +454,10 @@
       return {
         x: idealXPos,
         y: idealYPos,
-        verticalAlignment: verticalAlignment,
-        horizontalAlignment: horizontalAlignment,
+        verticalAlignment,
+        horizontalAlignment,
         height: idealHeight,
-        width: idealWidth
+        width: idealWidth,
       };
     }
 
@@ -475,7 +470,7 @@
         targets: this.dropdownEl,
         opacity: {
           value: [0, 1],
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         },
         scaleX: [0.3, 1],
         scaleY: [0.3, 1],
@@ -490,7 +485,7 @@
           if (typeof this.options.onOpenEnd === 'function') {
             this.options.onOpenEnd.call(this, this.el);
           }
-        }
+        },
       });
     }
 
@@ -503,7 +498,7 @@
         targets: this.dropdownEl,
         opacity: {
           value: 0,
-          easing: 'easeOutQuint'
+          easing: 'easeOutQuint',
         },
         scaleX: 0.3,
         scaleY: 0.3,
@@ -516,7 +511,7 @@
           if (typeof this.options.onCloseEnd === 'function') {
             this.options.onCloseEnd.call(this, this.el);
           }
-        }
+        },
       });
     }
 
@@ -525,16 +520,16 @@
      */
     _placeDropdown() {
       // Set width before calculating positionInfo
-      let idealWidth = this.options.constrainWidth
+      const idealWidth = this.options.constrainWidth
         ? this.el.getBoundingClientRect().width
         : this.dropdownEl.getBoundingClientRect().width;
-      this.dropdownEl.style.width = idealWidth + 'px';
+      this.dropdownEl.style.width = `${idealWidth}px`;
 
-      let positionInfo = this._getDropdownPosition();
-      this.dropdownEl.style.left = positionInfo.x + 'px';
-      this.dropdownEl.style.top = positionInfo.y + 'px';
-      this.dropdownEl.style.height = positionInfo.height + 'px';
-      this.dropdownEl.style.width = positionInfo.width + 'px';
+      const positionInfo = this._getDropdownPosition();
+      this.dropdownEl.style.left = `${positionInfo.x}px`;
+      this.dropdownEl.style.top = `${positionInfo.y}px`;
+      this.dropdownEl.style.height = `${positionInfo.height}px`;
+      this.dropdownEl.style.width = `${positionInfo.width}px`;
       this.dropdownEl.style.transformOrigin = `${
         positionInfo.horizontalAlignment === 'left' ? '0' : '100%'
       } ${positionInfo.verticalAlignment === 'top' ? '0' : '100%'}`;
@@ -596,7 +591,7 @@
           height: '',
           left: '',
           top: '',
-          'transform-origin': ''
+          'transform-origin': '',
         });
         this._placeDropdown();
       }
@@ -614,4 +609,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Dropdown, 'dropdown', 'M_Dropdown');
   }
-})(cash, M.anime);
+}(cash, M.anime));

@@ -1,7 +1,5 @@
-(function($) {
-  'use strict';
-
-  let _defaults = {
+(function ($) {
+  const _defaults = {
     duration: 200, // ms
     dist: -100, // zoom scale TODO: make this more intuitive as an option
     shift: 0, // spacing for center image
@@ -10,7 +8,7 @@
     fullWidth: false, // Change to full width styles
     indicators: false, // Toggle indicators
     noWrap: false, // Don't wrap around and cycle through items.
-    onCycleTo: null // Callback for when a new slide is cycled to.
+    onCycleTo: null, // Callback for when a new slide is cycled to.
   };
 
   /**
@@ -80,7 +78,7 @@
       this.$el.find('.carousel-item').each((el, i) => {
         this.images.push(el);
         if (this.showIndicators) {
-          let $indicator = $('<li class="indicator-item"></li>');
+          const $indicator = $('<li class="indicator-item"></li>');
 
           // Add active to first by default.
           if (i === 0) {
@@ -101,7 +99,7 @@
       // Setup cross browser string
       this.xform = 'transform';
       ['webkit', 'Moz', 'O', 'ms'].every((prefix) => {
-        var e = prefix + 'Transform';
+        const e = `${prefix}Transform`;
         if (typeof document.body.style[e] !== 'undefined') {
           this.xform = e;
           return false;
@@ -125,7 +123,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Carousel;
     }
 
@@ -166,7 +164,7 @@
       }
 
       // Resize
-      let throttledResize = M.throttle(this._handleResize, 200);
+      const throttledResize = M.throttle(this._handleResize, 200);
       this._handleThrottledResizeBound = throttledResize.bind(this);
 
       window.addEventListener('resize', this._handleThrottledResizeBound);
@@ -223,7 +221,8 @@
      * @param {Event} e
      */
     _handleCarouselDrag(e) {
-      let x, y, delta, deltaY;
+      let x; let y; let delta; let
+        deltaY;
       if (this.pressed) {
         x = this._xpos(e);
         y = this._ypos(e);
@@ -303,11 +302,11 @@
         e.preventDefault();
         e.stopPropagation();
         return false;
-      } else if (!this.options.fullWidth) {
-        let clickedIndex = $(e.target)
+      } if (!this.options.fullWidth) {
+        const clickedIndex = $(e.target)
           .closest('.carousel-item')
           .index();
-        let diff = this._wrap(this.center) - clickedIndex;
+        const diff = this._wrap(this.center) - clickedIndex;
 
         // Disable clicks if carousel was shifted by click
         if (diff !== 0) {
@@ -325,7 +324,7 @@
     _handleIndicatorClick(e) {
       e.stopPropagation();
 
-      let indicator = $(e.target).closest('.indicator-item');
+      const indicator = $(e.target).closest('.indicator-item');
       if (indicator.length) {
         this._cycleTo(indicator.index());
       }
@@ -356,32 +355,32 @@
      * @param {Booleam} imageOnly - true for image slides
      */
     _setCarouselHeight(imageOnly) {
-      let firstSlide = this.$el.find('.carousel-item.active').length
+      const firstSlide = this.$el.find('.carousel-item.active').length
         ? this.$el.find('.carousel-item.active').first()
         : this.$el.find('.carousel-item').first();
-      let firstImage = firstSlide.find('img').first();
+      const firstImage = firstSlide.find('img').first();
       if (firstImage.length) {
         if (firstImage[0].complete) {
           // If image won't trigger the load event
-          let imageHeight = firstImage.height();
+          const imageHeight = firstImage.height();
           if (imageHeight > 0) {
-            this.$el.css('height', imageHeight + 'px');
+            this.$el.css('height', `${imageHeight}px`);
           } else {
             // If image still has no height, use the natural dimensions to calculate
-            let naturalWidth = firstImage[0].naturalWidth;
-            let naturalHeight = firstImage[0].naturalHeight;
-            let adjustedHeight = this.$el.width() / naturalWidth * naturalHeight;
-            this.$el.css('height', adjustedHeight + 'px');
+            const { naturalWidth } = firstImage[0];
+            const { naturalHeight } = firstImage[0];
+            const adjustedHeight = this.$el.width() / naturalWidth * naturalHeight;
+            this.$el.css('height', `${adjustedHeight}px`);
           }
         } else {
           // Get height when image is loaded normally
           firstImage.one('load', (el, i) => {
-            this.$el.css('height', el.offsetHeight + 'px');
+            this.$el.css('height', `${el.offsetHeight}px`);
           });
         }
       } else if (!imageOnly) {
-        let slideHeight = firstSlide.height();
-        this.$el.css('height', slideHeight + 'px');
+        const slideHeight = firstSlide.height();
+        this.$el.css('height', `${slideHeight}px`);
       }
     }
 
@@ -425,7 +424,8 @@
      * Tracks scrolling information
      */
     _track() {
-      let now, elapsed, delta, v;
+      let now; let elapsed; let delta; let
+        v;
 
       now = Date.now();
       elapsed = now - this.timestamp;
@@ -441,7 +441,8 @@
      * Auto scrolls to nearest carousel item.
      */
     _autoScroll() {
-      let elapsed, delta;
+      let elapsed; let
+        delta;
 
       if (this.amplitude) {
         elapsed = Date.now() - this.timestamp;
@@ -472,18 +473,18 @@
       }, this.options.duration);
 
       // Start actual scroll
-      let i,
-        half,
-        delta,
-        dir,
-        tween,
-        el,
-        alignment,
-        zTranslation,
-        tweenedOpacity,
-        centerTweenedOpacity;
-      let lastCenter = this.center;
-      let numVisibleOffset = 1 / this.options.numVisible;
+      let i;
+      let half;
+      let delta;
+      let dir;
+      let tween;
+      let el;
+      let alignment;
+      let zTranslation;
+      let tweenedOpacity;
+      let centerTweenedOpacity;
+      const lastCenter = this.center;
+      const numVisibleOffset = 1 / this.options.numVisible;
 
       this.offset = typeof x === 'number' ? x : this.offset;
       this.center = Math.floor((this.offset + this.dim / 2) / this.dim);
@@ -496,15 +497,15 @@
         alignment = 'translateX(0)';
         centerTweenedOpacity = 1;
       } else {
-        alignment = 'translateX(' + (this.el.clientWidth - this.itemWidth) / 2 + 'px) ';
-        alignment += 'translateY(' + (this.el.clientHeight - this.itemHeight) / 2 + 'px)';
+        alignment = `translateX(${(this.el.clientWidth - this.itemWidth) / 2}px) `;
+        alignment += `translateY(${(this.el.clientHeight - this.itemHeight) / 2}px)`;
         centerTweenedOpacity = 1 - numVisibleOffset * tween;
       }
 
       // Set indicator active
       if (this.showIndicators) {
-        let diff = this.center % this.count;
-        let activeIndicator = this.$indicators.find('.indicator-item.active');
+        const diff = this.center % this.count;
+        const activeIndicator = this.$indicators.find('.indicator-item.active');
         if (activeIndicator.index() !== diff) {
           activeIndicator.removeClass('active');
           this.$indicators
@@ -524,10 +525,10 @@
           this.$el.find('.carousel-item').removeClass('active');
           el.classList.add('active');
         }
-        let transformString = `${alignment} translateX(${-delta / 2}px) translateX(${dir *
-          this.options.shift *
-          tween *
-          i}px) translateZ(${this.options.dist * tween}px)`;
+        const transformString = `${alignment} translateX(${-delta / 2}px) translateX(${dir
+          * this.options.shift
+          * tween
+          * i}px) translateZ(${this.options.dist * tween}px)`;
         this._updateItemStyle(el, centerTweenedOpacity, 0, transformString);
       }
 
@@ -543,8 +544,8 @@
         // Don't show wrapped items.
         if (!this.noWrap || this.center + i < this.count) {
           el = this.images[this._wrap(this.center + i)];
-          let transformString = `${alignment} translateX(${this.options.shift +
-            (this.dim * i - delta) / 2}px) translateZ(${zTranslation}px)`;
+          const transformString = `${alignment} translateX(${this.options.shift
+            + (this.dim * i - delta) / 2}px) translateZ(${zTranslation}px)`;
           this._updateItemStyle(el, tweenedOpacity, -i, transformString);
         }
 
@@ -559,8 +560,8 @@
         // Don't show wrapped items.
         if (!this.noWrap || this.center - i >= 0) {
           el = this.images[this._wrap(this.center - i)];
-          let transformString = `${alignment} translateX(${-this.options.shift +
-            (-this.dim * i - delta) / 2}px) translateZ(${zTranslation}px)`;
+          const transformString = `${alignment} translateX(${-this.options.shift
+            + (-this.dim * i - delta) / 2}px) translateZ(${zTranslation}px)`;
           this._updateItemStyle(el, tweenedOpacity, -i, transformString);
         }
       }
@@ -569,14 +570,14 @@
       // Don't show wrapped items.
       if (!this.noWrap || (this.center >= 0 && this.center < this.count)) {
         el = this.images[this._wrap(this.center)];
-        let transformString = `${alignment} translateX(${-delta / 2}px) translateX(${dir *
-          this.options.shift *
-          tween}px) translateZ(${this.options.dist * tween}px)`;
+        const transformString = `${alignment} translateX(${-delta / 2}px) translateX(${dir
+          * this.options.shift
+          * tween}px) translateZ(${this.options.dist * tween}px)`;
         this._updateItemStyle(el, centerTweenedOpacity, 0, transformString);
       }
 
       // onCycleTo callback
-      let $currItem = this.$el.find('.carousel-item').eq(this._wrap(this.center));
+      const $currItem = this.$el.find('.carousel-item').eq(this._wrap(this.center));
       if (lastCenter !== this.center && typeof this.options.onCycleTo === 'function') {
         this.options.onCycleTo.call(this, $currItem[0], this.dragged);
       }
@@ -714,4 +715,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Carousel, 'carousel', 'M_Carousel');
   }
-})(cash);
+}(cash));

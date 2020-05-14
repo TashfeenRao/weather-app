@@ -1,15 +1,14 @@
-(function($) {
+(function ($) {
   // Function to update labels of text fields
-  M.updateTextFields = function() {
-    let input_selector =
-      'input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], input[type=number], input[type=search], input[type=date], input[type=time], textarea';
-    $(input_selector).each(function(element, index) {
-      let $this = $(this);
+  M.updateTextFields = function () {
+    const input_selector = 'input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], input[type=number], input[type=search], input[type=date], input[type=time], textarea';
+    $(input_selector).each(function (element, index) {
+      const $this = $(this);
       if (
-        element.value.length > 0 ||
-        $(element).is(':focus') ||
-        element.autofocus ||
-        $this.attr('placeholder') !== null
+        element.value.length > 0
+        || $(element).is(':focus')
+        || element.autofocus
+        || $this.attr('placeholder') !== null
       ) {
         $this.siblings('label').addClass('active');
       } else if (element.validity) {
@@ -20,34 +19,32 @@
     });
   };
 
-  M.validate_field = function(object) {
-    let hasLength = object.attr('data-length') !== null;
-    let lenAttr = parseInt(object.attr('data-length'));
-    let len = object[0].value.length;
+  M.validate_field = function (object) {
+    const hasLength = object.attr('data-length') !== null;
+    const lenAttr = parseInt(object.attr('data-length'));
+    const len = object[0].value.length;
 
     if (len === 0 && object[0].validity.badInput === false && !object.is(':required')) {
       if (object.hasClass('validate')) {
         object.removeClass('valid');
         object.removeClass('invalid');
       }
-    } else {
-      if (object.hasClass('validate')) {
-        // Check for character counter attributes
-        if (
-          (object.is(':valid') && hasLength && len <= lenAttr) ||
-          (object.is(':valid') && !hasLength)
-        ) {
-          object.removeClass('invalid');
-          object.addClass('valid');
-        } else {
-          object.removeClass('valid');
-          object.addClass('invalid');
-        }
+    } else if (object.hasClass('validate')) {
+      // Check for character counter attributes
+      if (
+        (object.is(':valid') && hasLength && len <= lenAttr)
+          || (object.is(':valid') && !hasLength)
+      ) {
+        object.removeClass('invalid');
+        object.addClass('valid');
+      } else {
+        object.removeClass('valid');
+        object.addClass('invalid');
       }
     }
   };
 
-  M.textareaAutoResize = function($textarea) {
+  M.textareaAutoResize = function ($textarea) {
     // Wrap if native element
     if ($textarea instanceof Element) {
       $textarea = $($textarea);
@@ -66,15 +63,15 @@
     }
 
     // Set font properties of hiddenDiv
-    let fontFamily = $textarea.css('font-family');
-    let fontSize = $textarea.css('font-size');
-    let lineHeight = $textarea.css('line-height');
+    const fontFamily = $textarea.css('font-family');
+    const fontSize = $textarea.css('font-size');
+    const lineHeight = $textarea.css('line-height');
 
     // Firefox can't handle padding shorthand.
-    let paddingTop = $textarea.css('padding-top');
-    let paddingRight = $textarea.css('padding-right');
-    let paddingBottom = $textarea.css('padding-bottom');
-    let paddingLeft = $textarea.css('padding-left');
+    const paddingTop = $textarea.css('padding-top');
+    const paddingRight = $textarea.css('padding-right');
+    const paddingBottom = $textarea.css('padding-bottom');
+    const paddingLeft = $textarea.css('padding-left');
 
     if (fontSize) {
       hiddenDiv.css('font-size', fontSize);
@@ -107,17 +104,17 @@
       hiddenDiv.css('overflow-wrap', 'normal').css('white-space', 'pre');
     }
 
-    hiddenDiv.text($textarea[0].value + '\n');
-    let content = hiddenDiv.html().replace(/\n/g, '<br>');
+    hiddenDiv.text(`${$textarea[0].value}\n`);
+    const content = hiddenDiv.html().replace(/\n/g, '<br>');
     hiddenDiv.html(content);
 
     // When textarea is hidden, width goes crazy.
     // Approximate with half of window size
 
     if ($textarea[0].offsetWidth > 0 && $textarea[0].offsetHeight > 0) {
-      hiddenDiv.css('width', $textarea.width() + 'px');
+      hiddenDiv.css('width', `${$textarea.width()}px`);
     } else {
-      hiddenDiv.css('width', window.innerWidth / 2 + 'px');
+      hiddenDiv.css('width', `${window.innerWidth / 2}px`);
     }
 
     /**
@@ -125,25 +122,24 @@
      * original height of the textarea
      */
     if ($textarea.data('original-height') <= hiddenDiv.innerHeight()) {
-      $textarea.css('height', hiddenDiv.innerHeight() + 'px');
+      $textarea.css('height', `${hiddenDiv.innerHeight()}px`);
     } else if ($textarea[0].value.length < $textarea.data('previous-length')) {
       /**
        * In case the new height is less than original height, it
        * means the textarea has less text than before
        * So we set the height to the original one
        */
-      $textarea.css('height', $textarea.data('original-height') + 'px');
+      $textarea.css('height', `${$textarea.data('original-height')}px`);
     }
     $textarea.data('previous-length', $textarea[0].value.length);
   };
 
-  $(document).ready(function() {
+  $(document).ready(() => {
     // Text based inputs
-    let input_selector =
-      'input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], input[type=number], input[type=search], input[type=date], input[type=time], textarea';
+    const input_selector = 'input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], input[type=number], input[type=search], input[type=date], input[type=time], textarea';
 
     // Add active if form auto complete
-    $(document).on('change', input_selector, function() {
+    $(document).on('change', input_selector, function () {
       if (this.value.length !== 0 || $(this).attr('placeholder') !== null) {
         $(this)
           .siblings('label')
@@ -153,19 +149,19 @@
     });
 
     // Add active if input element has been pre-populated on document ready
-    $(document).ready(function() {
+    $(document).ready(() => {
       M.updateTextFields();
     });
 
     // HTML DOM FORM RESET handling
-    $(document).on('reset', function(e) {
-      let formReset = $(e.target);
+    $(document).on('reset', (e) => {
+      const formReset = $(e.target);
       if (formReset.is('form')) {
         formReset
           .find(input_selector)
           .removeClass('valid')
           .removeClass('invalid');
-        formReset.find(input_selector).each(function(e) {
+        formReset.find(input_selector).each(function (e) {
           if (this.value.length) {
             $(this)
               .siblings('label')
@@ -174,8 +170,8 @@
         });
 
         // Reset select (after native reset)
-        setTimeout(function() {
-          formReset.find('select').each(function() {
+        setTimeout(() => {
+          formReset.find('select').each(function () {
             // check if initialized
             if (this.M_FormSelect) {
               $(this).trigger('change');
@@ -191,14 +187,14 @@
      */
     document.addEventListener(
       'focus',
-      function(e) {
+      (e) => {
         if ($(e.target).is(input_selector)) {
           $(e.target)
             .siblings('label, .prefix')
             .addClass('active');
         }
       },
-      true
+      true,
     );
 
     /**
@@ -207,15 +203,15 @@
      */
     document.addEventListener(
       'blur',
-      function(e) {
-        let $inputElement = $(e.target);
+      (e) => {
+        const $inputElement = $(e.target);
         if ($inputElement.is(input_selector)) {
           let selector = '.prefix';
 
           if (
-            $inputElement[0].value.length === 0 &&
-            $inputElement[0].validity.badInput !== true &&
-            $inputElement.attr('placeholder') === null
+            $inputElement[0].value.length === 0
+            && $inputElement[0].validity.badInput !== true
+            && $inputElement.attr('placeholder') === null
           ) {
             selector += ', label';
           }
@@ -223,26 +219,25 @@
           M.validate_field($inputElement);
         }
       },
-      true
+      true,
     );
 
     // Radio and Checkbox focus class
-    let radio_checkbox = 'input[type=radio], input[type=checkbox]';
-    $(document).on('keyup', radio_checkbox, function(e) {
+    const radio_checkbox = 'input[type=radio], input[type=checkbox]';
+    $(document).on('keyup', radio_checkbox, function (e) {
       // TAB, check if tabbing to radio or checkbox.
       if (e.which === M.keys.TAB) {
         $(this).addClass('tabbed');
-        let $this = $(this);
-        $this.one('blur', function(e) {
+        const $this = $(this);
+        $this.one('blur', function (e) {
           $(this).removeClass('tabbed');
         });
-        return;
       }
     });
 
-    let text_area_selector = '.materialize-textarea';
-    $(text_area_selector).each(function() {
-      let $textarea = $(this);
+    const text_area_selector = '.materialize-textarea';
+    $(text_area_selector).each(function () {
+      const $textarea = $(this);
       /**
        * Resize textarea on document load after storing
        * the original height and the original length
@@ -252,19 +247,19 @@
       M.textareaAutoResize($textarea);
     });
 
-    $(document).on('keyup', text_area_selector, function() {
+    $(document).on('keyup', text_area_selector, function () {
       M.textareaAutoResize($(this));
     });
-    $(document).on('keydown', text_area_selector, function() {
+    $(document).on('keydown', text_area_selector, function () {
       M.textareaAutoResize($(this));
     });
 
     // File Input Path
-    $(document).on('change', '.file-field input[type="file"]', function() {
-      let file_field = $(this).closest('.file-field');
-      let path_input = file_field.find('input.file-path');
-      let files = $(this)[0].files;
-      let file_names = [];
+    $(document).on('change', '.file-field input[type="file"]', function () {
+      const file_field = $(this).closest('.file-field');
+      const path_input = file_field.find('input.file-path');
+      const { files } = $(this)[0];
+      const file_names = [];
       for (let i = 0; i < files.length; i++) {
         file_names.push(files[i].name);
       }
@@ -272,4 +267,4 @@
       path_input.trigger('change');
     });
   }); // End of $(document).ready
-})(cash);
+}(cash));

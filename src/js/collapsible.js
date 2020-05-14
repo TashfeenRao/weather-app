@@ -1,14 +1,12 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     accordion: true,
     onOpenStart: undefined,
     onOpenEnd: undefined,
     onCloseStart: undefined,
     onCloseEnd: undefined,
     inDuration: 300,
-    outDuration: 300
+    outDuration: 300,
   };
 
   /**
@@ -47,7 +45,7 @@
       this._setupEventHandlers();
 
       // Open first active
-      let $activeBodies = this.$el.children('li.active').children('.collapsible-body');
+      const $activeBodies = this.$el.children('li.active').children('.collapsible-body');
       if (this.options.accordion) {
         // Handle Accordion
         $activeBodies.first().css('display', 'block');
@@ -69,7 +67,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Collapsible;
     }
 
@@ -108,14 +106,14 @@
      * @param {Event} e
      */
     _handleCollapsibleClick(e) {
-      let $header = $(e.target).closest('.collapsible-header');
+      const $header = $(e.target).closest('.collapsible-header');
       if (e.target && $header.length) {
-        let $collapsible = $header.closest('.collapsible');
+        const $collapsible = $header.closest('.collapsible');
         if ($collapsible[0] === this.el) {
-          let $collapsibleLi = $header.closest('li');
-          let $collapsibleLis = $collapsible.children('li');
-          let isActive = $collapsibleLi[0].classList.contains('active');
-          let index = $collapsibleLis.index($collapsibleLi);
+          const $collapsibleLi = $header.closest('li');
+          const $collapsibleLis = $collapsible.children('li');
+          const isActive = $collapsibleLi[0].classList.contains('active');
+          const index = $collapsibleLis.index($collapsibleLi);
 
           if (isActive) {
             this.close(index);
@@ -141,9 +139,9 @@
      * @param {Number} index - 0th index of slide
      */
     _animateIn(index) {
-      let $collapsibleLi = this.$el.children('li').eq(index);
+      const $collapsibleLi = this.$el.children('li').eq(index);
       if ($collapsibleLi.length) {
-        let $body = $collapsibleLi.children('.collapsible-body');
+        const $body = $collapsibleLi.children('.collapsible-body');
 
         anim.remove($body[0]);
         $body.css({
@@ -151,15 +149,15 @@
           overflow: 'hidden',
           height: 0,
           paddingTop: '',
-          paddingBottom: ''
+          paddingBottom: '',
         });
 
-        let pTop = $body.css('padding-top');
-        let pBottom = $body.css('padding-bottom');
-        let finalHeight = $body[0].scrollHeight;
+        const pTop = $body.css('padding-top');
+        const pBottom = $body.css('padding-bottom');
+        const finalHeight = $body[0].scrollHeight;
         $body.css({
           paddingTop: 0,
-          paddingBottom: 0
+          paddingBottom: 0,
         });
 
         anim({
@@ -174,14 +172,14 @@
               overflow: '',
               paddingTop: '',
               paddingBottom: '',
-              height: ''
+              height: '',
             });
 
             // onOpenEnd callback
             if (typeof this.options.onOpenEnd === 'function') {
               this.options.onOpenEnd.call(this, $collapsibleLi[0]);
             }
-          }
+          },
         });
       }
     }
@@ -191,9 +189,9 @@
      * @param {Number} index - 0th index of slide to open
      */
     _animateOut(index) {
-      let $collapsibleLi = this.$el.children('li').eq(index);
+      const $collapsibleLi = this.$el.children('li').eq(index);
       if ($collapsibleLi.length) {
-        let $body = $collapsibleLi.children('.collapsible-body');
+        const $body = $collapsibleLi.children('.collapsible-body');
         anim.remove($body[0]);
         $body.css('overflow', 'hidden');
         anim({
@@ -208,14 +206,14 @@
               height: '',
               overflow: '',
               padding: '',
-              display: ''
+              display: '',
             });
 
             // onCloseEnd callback
             if (typeof this.options.onCloseEnd === 'function') {
               this.options.onCloseEnd.call(this, $collapsibleLi[0]);
             }
-          }
+          },
         });
       }
     }
@@ -225,7 +223,7 @@
      * @param {Number} index - 0th index of slide
      */
     open(index) {
-      let $collapsibleLi = this.$el.children('li').eq(index);
+      const $collapsibleLi = this.$el.children('li').eq(index);
       if ($collapsibleLi.length && !$collapsibleLi[0].classList.contains('active')) {
         // onOpenStart callback
         if (typeof this.options.onOpenStart === 'function') {
@@ -234,10 +232,10 @@
 
         // Handle accordion behavior
         if (this.options.accordion) {
-          let $collapsibleLis = this.$el.children('li');
-          let $activeLis = this.$el.children('li.active');
+          const $collapsibleLis = this.$el.children('li');
+          const $activeLis = this.$el.children('li.active');
           $activeLis.each((el) => {
-            let index = $collapsibleLis.index($(el));
+            const index = $collapsibleLis.index($(el));
             this.close(index);
           });
         }
@@ -253,7 +251,7 @@
      * @param {Number} index - 0th index of slide
      */
     close(index) {
-      let $collapsibleLi = this.$el.children('li').eq(index);
+      const $collapsibleLi = this.$el.children('li').eq(index);
       if ($collapsibleLi.length && $collapsibleLi[0].classList.contains('active')) {
         // onCloseStart callback
         if (typeof this.options.onCloseStart === 'function') {
@@ -272,4 +270,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Collapsible, 'collapsible', 'M_Collapsible');
   }
-})(cash, M.anime);
+}(cash, M.anime));

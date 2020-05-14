@@ -1,11 +1,9 @@
-(function($) {
-  'use strict';
-
-  let _defaults = {
+(function ($) {
+  const _defaults = {
     top: 0,
     bottom: Infinity,
     offset: 0,
-    onPositionChange: null
+    onPositionChange: null,
   };
 
   /**
@@ -48,7 +46,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Pushpin;
     }
 
@@ -61,13 +59,13 @@
       this._removeEventHandlers();
 
       // Remove pushpin Inst
-      let index = Pushpin._pushpins.indexOf(this);
+      const index = Pushpin._pushpins.indexOf(this);
       Pushpin._pushpins.splice(index, 1);
     }
 
     static _updateElements() {
-      for (let elIndex in Pushpin._pushpins) {
-        let pInstance = Pushpin._pushpins[elIndex];
+      for (const elIndex in Pushpin._pushpins) {
+        const pInstance = Pushpin._pushpins[elIndex];
         pInstance._updatePosition();
       }
     }
@@ -81,12 +79,12 @@
     }
 
     _updatePosition() {
-      let scrolled = M.getDocumentScrollTop() + this.options.offset;
+      const scrolled = M.getDocumentScrollTop() + this.options.offset;
 
       if (
-        this.options.top <= scrolled &&
-        this.options.bottom >= scrolled &&
-        !this.el.classList.contains('pinned')
+        this.options.top <= scrolled
+        && this.options.bottom >= scrolled
+        && !this.el.classList.contains('pinned')
       ) {
         this._removePinClasses();
         this.el.style.top = `${this.options.offset}px`;
@@ -142,4 +140,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Pushpin, 'pushpin', 'M_Pushpin');
   }
-})(cash);
+}(cash));

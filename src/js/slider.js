@@ -1,11 +1,9 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     indicators: true,
     height: 400,
     duration: 500,
-    interval: 6000
+    interval: 6000,
   };
 
   /**
@@ -38,9 +36,7 @@
       this.$slider = this.$el.find('.slides');
       this.$slides = this.$slider.children('li');
       this.activeIndex = this.$slides
-        .filter(function(item) {
-          return $(item).hasClass('active');
-        })
+        .filter((item) => $(item).hasClass('active'))
         .first()
         .index();
       if (this.activeIndex != -1) {
@@ -56,10 +52,9 @@
 
       // Move img src into background-image
       this.$slides.find('img').each((el) => {
-        let placeholderBase64 =
-          'data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+        const placeholderBase64 = 'data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
         if ($(el).attr('src') !== placeholderBase64) {
-          $(el).css('background-image', 'url("' + $(el).attr('src') + '")');
+          $(el).css('background-image', `url("${$(el).attr('src')}")`);
           $(el).attr('src', placeholderBase64);
         }
       });
@@ -75,7 +70,7 @@
           targets: this.$slides.first()[0],
           opacity: 1,
           duration: this.options.duration,
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         });
 
         this.activeIndex = 0;
@@ -95,7 +90,7 @@
           translateX: 0,
           translateY: 0,
           duration: this.options.duration,
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         });
       });
 
@@ -117,7 +112,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Slider;
     }
 
@@ -161,7 +156,7 @@
      * @param {Event} e
      */
     _handleIndicatorClick(e) {
-      let currIndex = $(e.target).index();
+      const currIndex = $(e.target).index();
       this.set(currIndex);
     }
 
@@ -183,11 +178,11 @@
      * @param {Number} duration
      */
     _animateCaptionIn(caption, duration) {
-      let animOptions = {
+      const animOptions = {
         targets: caption,
         opacity: 0,
-        duration: duration,
-        easing: 'easeOutQuad'
+        duration,
+        easing: 'easeOutQuad',
       };
 
       if ($(caption).hasClass('center-align')) {
@@ -209,11 +204,11 @@
       if (!this.$el.hasClass('fullscreen')) {
         if (this.options.indicators) {
           // Add height if indicators are present
-          this.$el.css('height', this.options.height + 40 + 'px');
+          this.$el.css('height', `${this.options.height + 40}px`);
         } else {
-          this.$el.css('height', this.options.height + 'px');
+          this.$el.css('height', `${this.options.height}px`);
         }
-        this.$slider.css('height', this.options.height + 'px');
+        this.$slider.css('height', `${this.options.height}px`);
       }
     }
 
@@ -224,7 +219,7 @@
       if (this.options.indicators) {
         this.$indicators = $('<ul class="indicators"></ul>');
         this.$slides.each((el, index) => {
-          let $indicator = $('<li class="indicator-item"></li>');
+          const $indicator = $('<li class="indicator-item"></li>');
           this.$indicators.append($indicator[0]);
         });
         this.$el.append(this.$indicators[0]);
@@ -251,7 +246,7 @@
       // Only do if index changes
       if (this.activeIndex != index) {
         this.$active = this.$slides.eq(this.activeIndex);
-        let $caption = this.$active.find('.caption');
+        const $caption = this.$active.find('.caption');
         this.$active.removeClass('active');
 
         anim({
@@ -267,10 +262,10 @@
                 translateX: 0,
                 translateY: 0,
                 duration: 0,
-                easing: 'easeOutQuad'
+                easing: 'easeOutQuad',
               });
             });
-          }
+          },
         });
 
         this._animateCaptionIn($caption[0], this.options.duration);
@@ -285,7 +280,7 @@
           targets: this.$slides.eq(index)[0],
           opacity: 1,
           duration: this.options.duration,
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         });
 
         anim({
@@ -295,7 +290,7 @@
           translateY: 0,
           duration: this.options.duration,
           delay: this.options.duration,
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         });
 
         this.$slides.eq(index).addClass('active');
@@ -320,7 +315,7 @@
       clearInterval(this.interval);
       this.interval = setInterval(
         this._handleIntervalBound,
-        this.options.duration + this.options.interval
+        this.options.duration + this.options.interval,
       );
     }
 
@@ -356,4 +351,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Slider, 'slider', 'M_Slider');
   }
-})(cash, M.anime);
+}(cash, M.anime));

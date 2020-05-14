@@ -1,7 +1,5 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     edge: 'left',
     draggable: true,
     inDuration: 250,
@@ -10,7 +8,7 @@
     onOpenEnd: null,
     onCloseStart: null,
     onCloseEnd: null,
-    preventScrolling: true
+    preventScrolling: true,
   };
 
   /**
@@ -86,7 +84,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Sidenav;
     }
 
@@ -101,14 +99,14 @@
       this.el.M_Sidenav = undefined;
       this.el.style.transform = '';
 
-      let index = Sidenav._sidenavs.indexOf(this);
+      const index = Sidenav._sidenavs.indexOf(this);
       if (index >= 0) {
         Sidenav._sidenavs.splice(index, 1);
       }
     }
 
     _createOverlay() {
-      let overlay = document.createElement('div');
+      const overlay = document.createElement('div');
       this._closeBound = this.close.bind(this);
       overlay.classList.add('sidenav-overlay');
 
@@ -168,11 +166,11 @@
      * @param {Event} e
      */
     _handleTriggerClick(e) {
-      let $trigger = $(e.target).closest('.sidenav-trigger');
+      const $trigger = $(e.target).closest('.sidenav-trigger');
       if (e.target && $trigger.length) {
-        let sidenavId = M.getIdFromTrigger($trigger[0]);
+        const sidenavId = M.getIdFromTrigger($trigger[0]);
 
-        let sidenavInstance = document.getElementById(sidenavId).M_Sidenav;
+        const sidenavInstance = document.getElementById(sidenavId).M_Sidenav;
         if (sidenavInstance) {
           sidenavInstance.open($trigger);
         }
@@ -186,7 +184,7 @@
      * @param {Event} e
      */
     _startDrag(e) {
-      let clientX = e.targetTouches[0].clientX;
+      const { clientX } = e.targetTouches[0];
       this.isDragged = true;
       this._startingXpos = clientX;
       this._xPos = this._startingXpos;
@@ -204,8 +202,8 @@
      * @param {Event} e
      */
     _dragMoveUpdate(e) {
-      let clientX = e.targetTouches[0].clientX;
-      let currentScrollTop = this.isOpen ? this.el.scrollTop : M.getDocumentScrollTop();
+      const { clientX } = e.targetTouches[0];
+      const currentScrollTop = this.isOpen ? this.el.scrollTop : M.getDocumentScrollTop();
       this.deltaX = Math.abs(this._xPos - clientX);
       this._xPos = clientX;
       this.velocityX = this.deltaX / (Date.now() - this._time);
@@ -237,7 +235,7 @@
       let totalDeltaX = this._xPos - this._startingXpos;
 
       // dragDirection is the attempted user drag direction
-      let dragDirection = totalDeltaX > 0 ? 'right' : 'left';
+      const dragDirection = totalDeltaX > 0 ? 'right' : 'left';
 
       // Don't allow totalDeltaX to exceed Sidenav width or be dragged in the opposite direction
       totalDeltaX = Math.min(this._width, Math.abs(totalDeltaX));
@@ -304,7 +302,7 @@
         let totalDeltaX = this._xPos - this._startingXpos;
 
         // dragDirection is the attempted user drag direction
-        let dragDirection = totalDeltaX > 0 ? 'right' : 'left';
+        const dragDirection = totalDeltaX > 0 ? 'right' : 'left';
 
         // Don't allow totalDeltaX to exceed Sidenav width or be dragged in the opposite direction
         totalDeltaX = Math.min(this._width, Math.abs(totalDeltaX));
@@ -346,7 +344,7 @@
      * Handles closing of Sidenav when element with class .sidenav-close
      */
     _handleCloseTriggerClick(e) {
-      let $closeTrigger = $(e.target).closest('.sidenav-close');
+      const $closeTrigger = $(e.target).closest('.sidenav-close');
       if ($closeTrigger.length && !this._isCurrentlyFixed()) {
         this.close();
       }
@@ -392,19 +390,19 @@
     }
 
     _createDragTarget() {
-      let dragTarget = document.createElement('div');
+      const dragTarget = document.createElement('div');
       dragTarget.classList.add('drag-target');
       document.body.appendChild(dragTarget);
       this.dragTarget = dragTarget;
     }
 
     _preventBodyScrolling() {
-      let body = document.body;
+      const { body } = document;
       body.style.overflow = 'hidden';
     }
 
     _enableBodyScrolling() {
-      let body = document.body;
+      const { body } = document;
       body.style.overflow = '';
     }
 
@@ -427,7 +425,7 @@
           targets: this.el,
           translateX: 0,
           duration: 0,
-          easing: 'easeOutQuad'
+          easing: 'easeOutQuad',
         });
         this._enableBodyScrolling();
         this._overlay.style.display = 'none';
@@ -458,7 +456,7 @@
 
       // Handle fixed Sidenav
       if (this._isCurrentlyFixed()) {
-        let transformX = this.options.edge === 'left' ? '-105%' : '105%';
+        const transformX = this.options.edge === 'left' ? '-105%' : '105%';
         this.el.style.transform = `translateX(${transformX})`;
 
         // Handle non-fixed Sidenav
@@ -481,10 +479,9 @@
     _animateSidenavIn() {
       let slideOutPercent = this.options.edge === 'left' ? -1 : 1;
       if (this.isDragged) {
-        slideOutPercent =
-          this.options.edge === 'left'
-            ? slideOutPercent + this.percentOpen
-            : slideOutPercent - this.percentOpen;
+        slideOutPercent = this.options.edge === 'left'
+          ? slideOutPercent + this.percentOpen
+          : slideOutPercent - this.percentOpen;
       }
 
       anim.remove(this.el);
@@ -498,7 +495,7 @@
           if (typeof this.options.onOpenEnd === 'function') {
             this.options.onOpenEnd.call(this, this.el);
           }
-        }
+        },
       });
     }
 
@@ -508,7 +505,7 @@
         start = this.percentOpen;
       } else {
         $(this._overlay).css({
-          display: 'block'
+          display: 'block',
         });
       }
 
@@ -517,7 +514,7 @@
         targets: this._overlay,
         opacity: [start, 1],
         duration: this.options.inDuration,
-        easing: 'easeOutQuad'
+        easing: 'easeOutQuad',
       });
     }
 
@@ -527,13 +524,12 @@
     }
 
     _animateSidenavOut() {
-      let endPercent = this.options.edge === 'left' ? -1 : 1;
+      const endPercent = this.options.edge === 'left' ? -1 : 1;
       let slideOutPercent = 0;
       if (this.isDragged) {
-        slideOutPercent =
-          this.options.edge === 'left'
-            ? endPercent + this.percentOpen
-            : endPercent - this.percentOpen;
+        slideOutPercent = this.options.edge === 'left'
+          ? endPercent + this.percentOpen
+          : endPercent - this.percentOpen;
       }
 
       anim.remove(this.el);
@@ -547,7 +543,7 @@
           if (typeof this.options.onCloseEnd === 'function') {
             this.options.onCloseEnd.call(this, this.el);
           }
-        }
+        },
       });
     }
 
@@ -560,7 +556,7 @@
         easing: 'easeOutQuad',
         complete: () => {
           $(this._overlay).css('display', 'none');
-        }
+        },
       });
     }
   }
@@ -577,4 +573,4 @@
   if (M.jQueryLoaded) {
     M.initializeJqueryWrapper(Sidenav, 'sidenav', 'M_Sidenav');
   }
-})(cash, M.anime);
+}(cash, M.anime));

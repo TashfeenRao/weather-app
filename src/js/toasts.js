@@ -1,14 +1,12 @@
-(function($, anim) {
-  'use strict';
-
-  let _defaults = {
+(function ($, anim) {
+  const _defaults = {
     html: '',
     displayLength: 4000,
     inDuration: 300,
     outDuration: 375,
     classes: '',
     completeCallback: null,
-    activationPercent: 0.8
+    activationPercent: 0.8,
   };
 
   class Toast {
@@ -37,7 +35,7 @@
 
       // Create new toast
       Toast._toasts.push(this);
-      let toastElement = this._createToast();
+      const toastElement = this._createToast();
       toastElement.M_Toast = this;
       this.el = toastElement;
       this.$el = $(toastElement);
@@ -53,7 +51,7 @@
      * Get Instance
      */
     static getInstance(el) {
-      let domElem = !!el.jquery ? el[0] : el;
+      const domElem = el.jquery ? el[0] : el;
       return domElem.M_Toast;
     }
 
@@ -61,7 +59,7 @@
      * Append toast container and add event handlers
      */
     static _createContainer() {
-      let container = document.createElement('div');
+      const container = document.createElement('div');
       container.setAttribute('id', 'toast-container');
 
       // Add event handler
@@ -95,8 +93,8 @@
      */
     static _onDragStart(e) {
       if (e.target && $(e.target).closest('.toast').length) {
-        let $toast = $(e.target).closest('.toast');
-        let toast = $toast[0].M_Toast;
+        const $toast = $(e.target).closest('.toast');
+        const toast = $toast[0].M_Toast;
         toast.panning = true;
         Toast._draggedToast = toast;
         toast.el.classList.add('panning');
@@ -112,16 +110,16 @@
      * @param {Event} e
      */
     static _onDragMove(e) {
-      if (!!Toast._draggedToast) {
+      if (Toast._draggedToast) {
         e.preventDefault();
-        let toast = Toast._draggedToast;
+        const toast = Toast._draggedToast;
         toast.deltaX = Math.abs(toast.xPos - Toast._xPos(e));
         toast.xPos = Toast._xPos(e);
         toast.velocityX = toast.deltaX / (Date.now() - toast.time);
         toast.time = Date.now();
 
-        let totalDeltaX = toast.xPos - toast.startingXPos;
-        let activationDistance = toast.el.offsetWidth * toast.options.activationPercent;
+        const totalDeltaX = toast.xPos - toast.startingXPos;
+        const activationDistance = toast.el.offsetWidth * toast.options.activationPercent;
         toast.el.style.transform = `translateX(${totalDeltaX}px)`;
         toast.el.style.opacity = 1 - Math.abs(totalDeltaX / activationDistance);
       }
@@ -131,14 +129,14 @@
      * End drag handler
      */
     static _onDragEnd() {
-      if (!!Toast._draggedToast) {
-        let toast = Toast._draggedToast;
+      if (Toast._draggedToast) {
+        const toast = Toast._draggedToast;
         toast.panning = false;
         toast.el.classList.remove('panning');
 
-        let totalDeltaX = toast.xPos - toast.startingXPos;
-        let activationDistance = toast.el.offsetWidth * toast.options.activationPercent;
-        let shouldBeDismissed = Math.abs(totalDeltaX) > activationDistance || toast.velocityX > 1;
+        const totalDeltaX = toast.xPos - toast.startingXPos;
+        const activationDistance = toast.el.offsetWidth * toast.options.activationPercent;
+        const shouldBeDismissed = Math.abs(totalDeltaX) > activationDistance || toast.velocityX > 1;
 
         // Remove toast
         if (shouldBeDismissed) {
@@ -171,7 +169,7 @@
      * Remove all toasts
      */
     static dismissAll() {
-      for (let toastIndex in Toast._toasts) {
+      for (const toastIndex in Toast._toasts) {
         Toast._toasts[toastIndex].dismiss();
       }
     }
@@ -180,11 +178,11 @@
      * Create toast and append it to toast container
      */
     _createToast() {
-      let toast = document.createElement('div');
+      const toast = document.createElement('div');
       toast.classList.add('toast');
 
       // Add custom classes onto toast
-      if (!!this.options.classes.length) {
+      if (this.options.classes.length) {
         $(toast).addClass(this.options.classes);
       }
 
@@ -192,16 +190,16 @@
       if (
         typeof HTMLElement === 'object'
           ? this.message instanceof HTMLElement
-          : this.message &&
-            typeof this.message === 'object' &&
-            this.message !== null &&
-            this.message.nodeType === 1 &&
-            typeof this.message.nodeName === 'string'
+          : this.message
+            && typeof this.message === 'object'
+            && this.message !== null
+            && this.message.nodeType === 1
+            && typeof this.message.nodeName === 'string'
       ) {
         toast.appendChild(this.message);
 
         // Check if it is jQuery object
-      } else if (!!this.message.jquery) {
+      } else if (this.message.jquery) {
         $(toast).append(this.message[0]);
 
         // Insert as html;
@@ -224,7 +222,7 @@
         top: 0,
         opacity: 1,
         duration: this.options.inDuration,
-        easing: 'easeOutCubic'
+        easing: 'easeOutCubic',
       });
     }
 
@@ -253,7 +251,7 @@
      */
     dismiss() {
       window.clearInterval(this.counterInterval);
-      let activationDistance = this.el.offsetWidth * this.options.activationPercent;
+      const activationDistance = this.el.offsetWidth * this.options.activationPercent;
 
       if (this.wasSwiped) {
         this.el.style.transition = 'transform .05s, opacity .05s';
@@ -278,7 +276,7 @@
           if (Toast._toasts.length === 0) {
             Toast._removeContainer();
           }
-        }
+        },
       });
     }
   }
@@ -304,7 +302,7 @@
   Toast._draggedToast = null;
 
   M.Toast = Toast;
-  M.toast = function(options) {
+  M.toast = function (options) {
     return new Toast(options);
   };
-})(cash, M.anime);
+}(cash, M.anime));
