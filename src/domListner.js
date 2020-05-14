@@ -16,7 +16,11 @@ const domListner = (() => {
         }).catch(() => {
           domDisplayer.showError();
         });
-        getWeather.infahrenheit(input.value)
+        getWeather.infahrenheit(input.value).then((temp) => {
+          domDisplayer.displayFerhanheit(temp);
+        }).catch(() => {
+          domDisplayer.showError();
+        });
       }
     });
   };

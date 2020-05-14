@@ -1,4 +1,18 @@
 const domDisplayer = (() => {
+  const displayFerhanheit = (temp) => {
+    const content = document.querySelector('#weather-content');
+    const div = document.createElement('div');
+    div.className = 'temp-container';
+    div.innerHTML = `
+    <h4>Temprature</h4>
+    <i class="fas fa-cloud"></i>
+    <div class="oc-temp">
+        <p>${temp}</p>
+        <span></span>
+        <p>F</p>
+    </div>`;
+    content.appendChild(div);
+  };
   const displayTemp = (data) => {
     const row = document.querySelector('#weather-container');
     row.innerHTML = `<div class="col center-align" id="weather-content">
@@ -32,7 +46,8 @@ const domDisplayer = (() => {
   return {
     showError,
     clearInput,
-    displayTemp
+    displayTemp,
+    displayFerhanheit,
   };
 })();
 
