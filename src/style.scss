@@ -7,6 +7,7 @@ a {
 }
 
 .col {
+    float: none !important;
     margin-right: auto;
 }
 
@@ -31,8 +32,10 @@ a {
         align-items: center;
     }
 }
-
-.fas {
-    font-size: 50px;
-    color: salmon;
+.farhanheit {
+    display: none;
+}
+.switch {
+    text-align: center;
+    margin-top: 20px;
 }

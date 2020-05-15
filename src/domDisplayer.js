@@ -3,7 +3,8 @@ const domDisplayer = (() => {
   const displayFerhanheit = (temp) => {
     const content = document.querySelector('#weather-content');
     const div = document.createElement('div');
-    div.className = 'temp-container';
+    div.className = 'temp-container farhanheit';
+    div.id = 'farhanheit';
     div.innerHTML = `
     <h4>${weather.weather[0].main}</h4>
     <img src='http://openweathermap.org/img/wn/${weather.weather[0].icon}.png' />
@@ -19,7 +20,7 @@ const domDisplayer = (() => {
     const row = document.querySelector('#weather-container');
     row.innerHTML = `<div class="col center-align" id="weather-content">
     <h1>${data.name}</h1>
-    <div class="temp-container">
+    <div class="temp-container" id="centigrade">
         <h4>${weather.weather[0].main}</h4>
         <img src='http://openweathermap.org/img/wn/${data.weather[0].icon}.png' />
         <div class="oc-temp">
@@ -29,6 +30,14 @@ const domDisplayer = (() => {
         </div>
     </div>
 </div>`;
+    const toggle = document.createElement('div');
+    toggle.className = 'switch';
+    toggle.innerHTML = ` <label>
+        In Farhenheit
+        <input type="checkbox" id=checkbox>
+        <span class="lever"></span>
+        </label>`;
+    row.appendChild(toggle);
   };
   const showError = () => {
     const row = document.querySelector('#weather-container');
@@ -41,6 +50,10 @@ const domDisplayer = (() => {
       </div>
     </div>`;
   };
+  const classRemover = () => {
+    document.getElementById('farhanheit').classList.toggle('farhanheit');
+    document.getElementById('centigrade').classList.toggle('farhanheit');
+  }
   const clearInput = () => {
     const input = document.querySelector('.validate');
     input.value = '';
@@ -50,6 +63,7 @@ const domDisplayer = (() => {
     clearInput,
     displayTemp,
     displayFerhanheit,
+    classRemover,
   };
 })();
 
