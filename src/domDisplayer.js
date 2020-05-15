@@ -33,9 +33,9 @@ const domDisplayer = (() => {
     const toggle = document.createElement('div');
     toggle.className = 'switch';
     toggle.innerHTML = ` <label>
-        In Farhenheit
-        <input type="checkbox" id=checkbox>
+    <input type="checkbox" id=checkbox>
         <span class="lever"></span>
+        In Farhenheit
         </label>`;
     row.appendChild(toggle);
   };
@@ -54,6 +54,12 @@ const domDisplayer = (() => {
     document.getElementById('farhanheit').classList.toggle('farhanheit');
     document.getElementById('centigrade').classList.toggle('farhanheit');
   }
+  const emptyinput = () => {
+    const row = document.querySelector('#weather-content');
+    row.innerHTML = `<div class="materialert error">
+    Please Type Name of City
+</div>`;
+  };
   const clearInput = () => {
     const input = document.querySelector('.validate');
     input.value = '';
@@ -64,6 +70,7 @@ const domDisplayer = (() => {
     displayTemp,
     displayFerhanheit,
     classRemover,
+    emptyinput,
   };
 })();
 

@@ -28,11 +28,11 @@ const domListner = (() => {
   const checkValidity = () => {
     const input = document.querySelector('.validate');
     if (!input.checkValidity()) {
-      return false;
+      domDisplayer.emptyinput();
+    } else {
+      getTempInCentigrade(input);
+      getTempInFarhanheit(input);
     }
-
-    getTempInCentigrade(input);
-    getTempInFarhanheit(input);
   };
   const getCityName = () => {
     const btn = document.querySelector('.btn-small');
