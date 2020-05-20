@@ -1,0 +1,44 @@
+body {
+    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+a {
+    display: block !important;
+}
+
+.col {
+    float: none !important;
+    margin-right: auto;
+}
+
+.btn-small {
+    display: block;
+}
+
+.temp-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+
+    p {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .oc-temp {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+    }
+}
+.farhanheit {
+    display: none;
+}
+.switch {
+    text-align: center;
+    margin-top: 20px;
+}
+.materialert {
+    color: red;
+} 
