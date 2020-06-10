@@ -16,7 +16,6 @@
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
 ![Hackage-Deps](https://img.shields.io/hackage-deps/v/json)
 ![Issues](https://img.shields.io/badge/issues-0-green)
-![GitHub followers](https://img.shields.io/github/followers/Tashfeen?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/TashfeenRao2?label=Tashfeen&style=social)
 
 </br>
@@ -58,7 +57,7 @@ $ npm start
 
 ## Live version
 
-Comming Soon
+https://tashfeenrao.github.io/weather-app/.
 
 ## Emailware
 
