@@ -78,6 +78,7 @@ This software uses the following open source packages:
 
 MIT
 
+## Author
 ---
 [Tashfeen Rao](https://tashfeenrao.github.io/personal-portfolio/) &nbsp;&middot;&nbsp;
 </br>
