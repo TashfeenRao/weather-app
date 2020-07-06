@@ -80,7 +80,7 @@ MIT
 
 ## Author
 ---
-[Tashfeen Rao](https://tashfeenrao.github.io/personal-portfolio/) &nbsp;&middot;&nbsp;
+Portfolio [Tashfeen Rao](https://tashfeen-rao.netlify.app/) &nbsp;&middot;&nbsp;
 </br>
 Email: tashfeendev@gmail.com &nbsp;&middot;&nbsp;
 </br>
